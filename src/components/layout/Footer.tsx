@@ -9,9 +9,9 @@ const navLinks = [
 ]
 
 const subsidiaries = [
-  { name: "Acker Software", href: "/subsidiaries#software" },
+  { name: "Acker Technologies", href: "/subsidiaries#technologies" },
   { name: "Acker Properties", href: "/subsidiaries#properties" },
-  { name: "Acker Apparel", href: "/subsidiaries#apparel" },
+  { name: "Acker Hospitality", href: "/subsidiaries#hospitality" },
 ]
 
 export function Footer() {
@@ -23,14 +23,22 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-bold text-white font-montserrat">
-                The <span className="text-[#D4AF37]">Acker Group</span>
-              </span>
+              <Image 
+                src="/logo.png" 
+                alt="Acker Group" 
+                width={1920} 
+                height={1080}
+                className="h-12 w-auto object-contain"
+              />
             </Link>
             <p className="text-[#E0E0E0] leading-relaxed max-w-md opacity-70 mt-4">
-              A diversified holding company building excellence across technology, real estate, and apparel. 
-              Creating sustainable value for the future.
+              A private holding company based in South Africa, managing a diversified portfolio across 
+              technology, real estate & construction, and hospitality. Building excellence through strategic leadership.
             </p>
+            <div className="mt-6 space-y-2 text-[#E0E0E0] text-sm opacity-70">
+              <p><strong className="text-[#D4AF37]">Email:</strong> <a href="mailto:contact@acker-group.com" className="hover:text-[#D4AF37] transition">contact@acker-group.com</a></p>
+              <p><strong className="text-[#D4AF37]">Location:</strong> South Africa</p>
+            </div>
           </div>
 
           {/* Subsidiaries */}
@@ -76,7 +84,7 @@ export function Footer() {
         <div className="pt-8 border-t border-[#D4AF37]/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-[#E0E0E0] opacity-50">
-              © {new Date().getFullYear()} The Acker Group. All rights reserved.
+              © {new Date().getFullYear()} Acker Group SA (Pty) Ltd. All rights reserved.
             </p>
             <div className="flex gap-6 text-xs text-[#E0E0E0] opacity-50">
               <Link href="/privacy" className="hover:text-[#D4AF37] hover:opacity-100 transition-colors duration-200">

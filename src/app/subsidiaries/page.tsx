@@ -10,46 +10,78 @@ export const metadata: Metadata = {
 export default function SubsidiariesPage() {
   const subsidiaries = [
     {
-      name: 'Acker Software',
-      description: 'Software development and technology solutions',
-      industry: 'Technology',
+      id: 'technologies',
+      name: 'Acker Technologies',
+      tagline: 'Technology & Innovation',
+      description: 'Building scalable, intelligent, and user-focused technology that powers innovation and digital transformation across industries.',
+      services: ['Website & app development', 'Software tools and SaaS products', 'IT consulting and automation'],
+      icon: '💻',
     },
     {
-      name: 'Acker Consulting',
-      description: 'Strategic business consulting and advisory services',
-      industry: 'Consulting',
+      id: 'properties',
+      name: 'Acker Properties',
+      tagline: 'Real Estate & Construction',
+      description: 'Designing, building, and maintaining exceptional spaces through property development, construction, and landscaping services.',
+      services: ['Residential & commercial construction', 'Property development', 'Landscaping and outdoor design'],
+      icon: '🏗️',
     },
     {
-      name: 'Acker Ventures',
-      description: 'Investment and venture capital arm',
-      industry: 'Finance',
+      id: 'hospitality',
+      name: 'Acker Hospitality',
+      tagline: 'Food & Leisure',
+      description: 'Delivering memorable dining and leisure experiences through quality restaurants, catering, and lifestyle cafés.',
+      services: ['Restaurant operations', 'Catering services', 'Café and lifestyle concepts'],
+      icon: '🍴',
     },
   ]
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
+    <div className="flex flex-col min-h-screen bg-[#0D0D0D]">
       <Header />
       
-      <main className="flex-1">
+      <main className="flex-1 bg-[#2A2A2A]">
         <div className="container mx-auto px-4 py-24">
-          <h1 className="text-5xl font-bold text-white mb-8 text-center">Our Subsidiaries</h1>
-        <p className="text-xl text-slate-300 text-center max-w-2xl mx-auto mb-16">
-          Discover the diverse portfolio of companies that make up the Acker Group ecosystem
-        </p>
+          <h1 className="text-5xl font-bold text-white mb-6 text-center font-montserrat">Our Subsidiaries</h1>
+          <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
+          <p className="text-xl text-[#E0E0E0] text-center max-w-2xl mx-auto mb-16">
+            Discover the diverse portfolio of companies that make up the Acker Group ecosystem
+          </p>
         
-        <div className="max-w-4xl mx-auto grid gap-8">
+        <div className="max-w-5xl mx-auto space-y-12">
           {subsidiaries.map((subsidiary) => (
             <div
-              key={subsidiary.name}
-              className="bg-slate-800/50 rounded-lg p-8 border border-slate-700 hover:border-slate-600 transition"
+              key={subsidiary.id}
+              id={subsidiary.id}
+              className="bg-[#1C1C1C] rounded-lg p-10 border-2 border-[#D4AF37]/20 hover:border-[#D4AF37]/40 transition-all"
             >
-              <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-white">{subsidiary.name}</h2>
-                <span className="px-3 py-1 text-xs font-medium bg-blue-600/20 text-blue-400 rounded-full">
-                  {subsidiary.industry}
-                </span>
+              {/* Header */}
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="text-5xl">{subsidiary.icon}</div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-white font-montserrat">{subsidiary.name}</h2>
+                    <span className="text-[#D4AF37] font-semibold">{subsidiary.tagline}</span>
+                  </div>
+                </div>
               </div>
-              <p className="text-slate-400">{subsidiary.description}</p>
+
+              {/* Description */}
+              <div className="mb-6">
+                <p className="text-lg text-[#E0E0E0] leading-relaxed">{subsidiary.description}</p>
+              </div>
+
+              {/* Services */}
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-white mb-4 font-montserrat">Services</h3>
+                <ul className="space-y-3">
+                  {subsidiary.services.map((service, index) => (
+                    <li key={index} className="flex items-start text-[#E0E0E0]">
+                      <span className="text-[#D4AF37] mr-3 text-xl">→</span>
+                      <span className="text-lg">{service}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ))}
         </div>

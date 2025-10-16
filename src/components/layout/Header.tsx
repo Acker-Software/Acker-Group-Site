@@ -16,9 +16,14 @@ export function Header() {
           href="/" 
           className="flex items-center hover:opacity-80 transition"
         >
-          <span className="text-2xl font-bold text-white font-montserrat">
-            The <span className="text-[#D4AF37]">Acker Group</span>
-          </span>
+          <Image 
+            src="/logo.png" 
+            alt="Acker Group" 
+            width={1920} 
+            height={1080}
+            className="h-12 w-auto object-contain"
+            priority
+          />
         </Link>
         
         <nav className="flex items-center gap-8 text-sm">

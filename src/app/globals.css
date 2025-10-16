@@ -4,18 +4,18 @@
 
 @layer base {
   :root {
-    --dark-grey: #1C1C1C;
-    --light-grey: #E0E0E0;
+    --dark-grey: #1F1F1F;
+    --light-grey: #F2F2F2;
     --gold: #D4AF37;
     --white: #FFFFFF;
   }
 
   * {
-    border-color: rgba(224, 224, 224, 0.1);
+    border-color: rgba(242, 242, 242, 0.1);
   }
 
   body {
-    background-color: #1C1C1C;
+    background-color: #1F1F1F;
     color: #FFFFFF;
     font-family: 'Inter', sans-serif;
   }
@@ -28,19 +28,19 @@
 
 @layer utilities {
   .bg-dark-grey {
-    background-color: #1C1C1C;
+    background-color: #1F1F1F;
   }
   
   .bg-light-grey {
-    background-color: #E0E0E0;
+    background-color: #F2F2F2;
   }
   
   .text-dark-grey {
-    color: #1C1C1C;
+    color: #1F1F1F;
   }
   
   .text-light-grey {
-    color: #E0E0E0;
+    color: #F2F2F2;
   }
   
   .text-gold {

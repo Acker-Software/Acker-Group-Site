@@ -14,48 +14,48 @@ export default function Home() {
 
   const divisions = [
     {
-      name: 'Acker Software',
-      description: 'Cutting-edge software solutions and digital innovation for enterprise clients worldwide.',
-      industry: 'Technology',
+      name: 'Acker Technologies',
+      description: 'Building scalable, intelligent, and user-focused technology that powers innovation and digital transformation.',
+      industry: 'Technology & Innovation',
       icon: '💻',
-      link: '/subsidiaries#software'
+      link: '/subsidiaries#technologies'
     },
     {
       name: 'Acker Properties',
-      description: 'Strategic real estate development and property management across premier markets.',
-      industry: 'Real Estate',
-      icon: '�',
+      description: 'Designing, building, and maintaining exceptional spaces through property development, construction, and landscaping.',
+      industry: 'Real Estate & Construction',
+      icon: '🏗️',
       link: '/subsidiaries#properties'
     },
     {
-      name: 'Acker Apparel',
-      description: 'Premium fashion and lifestyle brands with a commitment to quality and sustainability.',
-      industry: 'Apparel',
-      icon: '👔',
-      link: '/subsidiaries#apparel'
+      name: 'Acker Hospitality',
+      description: 'Delivering memorable dining and leisure experiences through quality restaurants, catering, and lifestyle cafés.',
+      industry: 'Food & Leisure',
+      icon: '🍴',
+      link: '/subsidiaries#hospitality'
     },
   ]
 
   const values = [
     {
-      title: 'Innovation',
-      description: 'Pioneering new solutions and embracing technological advancement',
-      icon: '�'
-    },
-    {
       title: 'Integrity',
-      description: 'Upholding the highest standards of ethics and transparency',
+      description: 'Ethical decision-making at all levels',
       icon: '⚖️'
     },
     {
-      title: 'Growth',
-      description: 'Building sustainable value for all stakeholders',
-      icon: '📈'
+      title: 'Innovation',
+      description: 'Continuous improvement and modernization',
+      icon: '💡'
+    },
+    {
+      title: 'Unity',
+      description: 'Strong collaboration across subsidiaries',
+      icon: '🤝'
     },
     {
       title: 'Sustainability',
-      description: 'Committed to environmental and social responsibility',
-      icon: '�'
+      description: 'Long-term, responsible growth',
+      icon: '🌱'
     }
   ]
 
@@ -74,11 +74,11 @@ export default function Home() {
           
           <div className={`container mx-auto px-4 text-center relative z-10 ${isVisible ? 'animate-fadeIn' : 'opacity-0'}`}>
             <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 leading-tight font-montserrat">
-              The <span className="text-[#D4AF37]">Acker Group</span>
+              <span className="text-[#D4AF37]">Acker Group</span>
             </h1>
             <div className="w-32 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
             <p className="text-xl md:text-2xl text-[#E0E0E0] max-w-3xl mx-auto mb-12 font-light">
-              Building a future across industries.
+              South Africa's most trusted, innovation-driven holding company built on integrity, sustainability, and excellence.
             </p>
             <Link
               href="/subsidiaries"
@@ -93,15 +93,15 @@ export default function Home() {
         <section className="w-full bg-[#2A2A2A] py-20 border-t border-[#D4AF37]/10">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-5xl font-bold text-white mb-6 font-montserrat">About The Acker Group</h2>
+              <h2 className="text-5xl font-bold text-white mb-6 font-montserrat">About Acker Group</h2>
               <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
               <p className="text-lg text-[#E0E0E0] leading-relaxed">
-                The Acker Group is a diversified holding company with strategic investments across 
+                Acker Group is a private holding company based in South Africa, managing and growing a diversified portfolio 
+                of subsidiaries through strategic leadership, financial stability, and cohesive branding. With investments across 
                 <span className="font-semibold text-[#D4AF37]"> technology</span>, 
-                <span className="font-semibold text-[#D4AF37]"> real estate</span>, and 
-                <span className="font-semibold text-[#D4AF37]"> apparel</span>. 
-                We build, manage, and grow exceptional businesses that create lasting value for stakeholders, 
-                communities, and the global economy. Our commitment to excellence drives every decision we make.
+                <span className="font-semibold text-[#D4AF37]"> real estate & construction</span>, and 
+                <span className="font-semibold text-[#D4AF37]"> hospitality</span>, 
+                we build exceptional businesses that create lasting value for stakeholders, communities, and the economy.
               </p>
             </div>
           </div>
@@ -168,7 +168,7 @@ export default function Home() {
         <section className="w-full bg-[#2A2A2A] py-20 border-t border-[#D4AF37]/20">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto text-center">
-              <h2 className="text-5xl font-bold text-white mb-6 font-montserrat">Partner With Us</h2>
+              <h2 className="text-5xl font-bold text-white mb-6 font-montserrat">Partner With Acker Group</h2>
               <div className="w-24 h-1 bg-[#D4AF37] mx-auto mb-8"></div>
               <p className="text-xl text-[#E0E0E0] mb-10 leading-relaxed">
                 Join forces with a diversified holding company committed to excellence, 
@@ -197,15 +197,11 @@ export default function Home() {
                   </a>
                 </p>
                 <div className="flex gap-6 justify-center text-[#E0E0E0]">
-                  <a href="https://www.linkedin.com/company/acker-group" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition">
-                    LinkedIn
+                  <a href="https://www.facebook.com/ackergroup" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition">
+                    Facebook
                   </a>
                   <span className="text-[#E0E0E0]/30">|</span>
-                  <a href="https://www.twitter.com/acker-group" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition">
-                    Twitter
-                  </a>
-                  <span className="text-[#E0E0E0]/30">|</span>
-                  <a href="https://www.instagram.com/acker-group" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition">
+                  <a href="https://www.instagram.com/ackergroup" target="_blank" rel="noopener noreferrer" className="hover:text-[#D4AF37] transition">
                     Instagram
                   </a>
                 </div>

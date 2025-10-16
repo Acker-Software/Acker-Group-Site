@@ -14,8 +14,17 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'The Acker Group - Building a Future Across Industries',
-  description: 'A diversified holding company with strategic investments in technology, real estate, and apparel. Committed to excellence, innovation, and sustainable growth.',
+  title: 'Acker Group - South Africa\'s Innovation-Driven Holding Company',
+  description: 'Private holding company based in South Africa, managing a diversified portfolio across technology, real estate & construction, and hospitality. Built on integrity, sustainability, and excellence.',
+  keywords: ['Acker Group', 'Acker Group SA', 'holding company', 'South Africa', 'technology', 'real estate', 'hospitality', 'innovation'],
+  authors: [{ name: 'Acker Group' }],
+  openGraph: {
+    title: 'Acker Group',
+    description: 'South Africa\'s most trusted, innovation-driven holding company',
+    url: 'https://acker-group.com',
+    siteName: 'Acker Group',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
