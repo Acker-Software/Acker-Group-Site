@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Acker Group",
-  description: "South Africa's most trusted, innovation-driven holding company built on integrity, sustainability, and excellence",
+  description: "An emerging innovation-driven holding company built on integrity, sustainability, and excellence",
   url: "https://acker-group.com",
   email: "contact@acker-group.com",
   location: "South Africa",

@@ -3,6 +3,7 @@
 import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 import { useState, FormEvent } from "react"
+import emailjs from '@emailjs/browser'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -20,25 +21,59 @@ export default function ContactPage() {
     setErrorMessage('')
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
+      // EmailJS configuration
+      const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+      const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+      const autoResponseTemplateId = process.env.NEXT_PUBLIC_EMAILJS_AUTORESPONSE_TEMPLATE_ID
+      const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Something went wrong')
+      // Check if EmailJS is configured
+      if (!serviceId || !templateId || !publicKey || 
+          serviceId === 'YOUR_SERVICE_ID' || 
+          templateId === 'YOUR_TEMPLATE_ID' || 
+          publicKey === 'YOUR_PUBLIC_KEY') {
+        throw new Error('EmailJS is not configured. Please check the EMAILJS_SETUP.md file for setup instructions.')
       }
 
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject || 'New Contact Form Submission',
+        message: formData.message,
+        to_email: 'contact@acker-group.com'
+      }
+
+      // Send email to you (admin notification)
+      const adminResponse = await emailjs.send(serviceId, templateId, templateParams, publicKey)
+      console.log('Admin notification sent:', adminResponse)
+
+      // Send auto-response to the user (if template is configured)
+      if (autoResponseTemplateId && autoResponseTemplateId !== 'your_autoresponse_template_id_here') {
+        try {
+          const userResponse = await emailjs.send(serviceId, autoResponseTemplateId, templateParams, publicKey)
+          console.log('Auto-response sent:', userResponse)
+        } catch (autoResponseError) {
+          // Don't fail the whole form if auto-response fails
+          console.warn('Auto-response failed (but main email sent):', autoResponseError)
+        }
+      }
+      
       setStatus('success')
       setFormData({ name: '', email: '', subject: '', message: '' })
-    } catch (error) {
+    } catch (error: any) {
       setStatus('error')
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to send message')
+      
+      // Better error messages
+      let errorMsg = 'Failed to send message. Please try again.'
+      
+      if (error.text) {
+        errorMsg = `EmailJS Error: ${error.text}`
+      } else if (error.message) {
+        errorMsg = error.message
+      }
+      
+      setErrorMessage(errorMsg)
+      console.error('EmailJS error details:', error)
     }
   }
 

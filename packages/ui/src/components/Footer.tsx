@@ -23,7 +23,7 @@ export const Footer = () => {
             />
           </Link>
           <p className="mt-4 max-w-sm text-slate-500">
-            Leading group of companies delivering innovative solutions
+            Building innovative solutions across multiple industries
           </p>
         </div>
         <div>

@@ -19,7 +19,7 @@ export const SiteProvider = ({
   const siteData: SiteContextValue = {
     id: siteId,
     name: "Acker Group",
-    description: "Leading group of companies delivering innovative solutions",
+    description: "Building innovative solutions across multiple industries",
     nav: [
       { slug: "home", label: "Home" },
       { slug: "about", label: "About" },

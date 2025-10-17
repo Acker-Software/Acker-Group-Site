@@ -19,12 +19,12 @@ export const coreNavLinks = [
 export const getSite = (siteId: SiteId) => ({
   id: siteId,
   name: "Acker Group",
-  description: "Leading group of companies",
+  description: "Building innovative solutions across multiple industries",
 })
 
 export const getSiteMetadata = (siteId: SiteId) => ({
   title: "Acker Group",
-  description: "Leading group of companies",
+  description: "Building innovative solutions across multiple industries",
 })
 
 export const getPageMetadata = (siteId: SiteId, pageSlug: PageSlug) => ({
