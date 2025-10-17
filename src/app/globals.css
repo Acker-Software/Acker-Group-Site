@@ -3,6 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: 'Blanka';
+    src: url('/fonts/Blanka-Regular.woff2') format('woff2'),
+         url('/fonts/Blanka-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* Force Blanka font loading */
+  .font-blanka {
+    font-family: 'Blanka', 'Arial Black', sans-serif !important;
+  }
+
   :root {
     --dark-grey: #1F1F1F;
     --light-grey: #F2F2F2;

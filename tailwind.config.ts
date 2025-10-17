@@ -16,6 +16,7 @@ const config: Config = {
       fontFamily: {
         montserrat: ['var(--font-montserrat)', 'sans-serif'],
         inter: ['var(--font-inter)', 'sans-serif'],
+        blanka: ['Blanka', 'Arial Black', 'sans-serif'],
       },
     },
   },

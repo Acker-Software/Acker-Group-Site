@@ -1,0 +1,25 @@
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      @font-face {
+        font-family: 'Blanka';
+        src: url('/fonts/Blanka-Regular.woff2') format('woff2'),
+             url('/fonts/Blanka-Regular.otf') format('opentype');
+        font-weight: normal;
+        font-style: normal;
+      }
+    </style>
+  </defs>
+  
+  <text 
+    x="150" 
+    y="50" 
+    font-family="Blanka" 
+    font-size="48" 
+    font-weight="normal"
+    fill="#D4AF37" 
+    text-anchor="middle"
+    dominant-baseline="middle"
+    letter-spacing="4"
+  >ACKER</text>
+</svg>

@@ -3,8 +3,13 @@ import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 
 export const metadata: Metadata = {
-  title: 'Our Subsidiaries - Acker Group',
-  description: 'Explore the companies within the Acker Group portfolio',
+  title: 'Our Divisions | Acker Technologies, Properties & Hospitality',
+  description: 'Explore Acker Group\'s diversified portfolio: Acker Technologies (software & IT innovation), Acker Properties (real estate & construction), and Acker Hospitality (restaurants & catering). Leading business solutions across South Africa.',
+  openGraph: {
+    title: 'Our Divisions | Acker Technologies, Properties & Hospitality',
+    description: 'Discover Acker Group\'s three core divisions driving innovation across technology, real estate, and hospitality in South Africa.',
+    url: 'https://acker-group.com/subsidiaries',
+  },
 }
 
 export default function SubsidiariesPage() {

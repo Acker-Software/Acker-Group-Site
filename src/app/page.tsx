@@ -19,6 +19,47 @@ export default function Home() {
     setIsVisible(true)
   }, [])
 
+  // Structured data for SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Acker Group SA (Pty) Ltd",
+    "alternateName": "Acker Group",
+    "url": "https://acker-group.com",
+    "logo": "https://acker-group.com/logo.png",
+    "description": "Private holding company based in South Africa, managing a diversified portfolio across technology, real estate & construction, and hospitality.",
+    "email": "contact@acker-group.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "ZA"
+    },
+    "sameAs": [
+      "https://www.facebook.com/ackergroup",
+      "https://www.instagram.com/ackergroup"
+    ],
+    "parentOrganization": {
+      "@type": "Organization",
+      "name": "Acker Group SA (Pty) Ltd"
+    },
+    "subOrganization": [
+      {
+        "@type": "Organization",
+        "name": "Acker Technologies",
+        "description": "Technology & Innovation division"
+      },
+      {
+        "@type": "Organization",
+        "name": "Acker Properties",
+        "description": "Real Estate & Construction division"
+      },
+      {
+        "@type": "Organization",
+        "name": "Acker Hospitality",
+        "description": "Food & Leisure division"
+      }
+    ]
+  }
+
   const divisions = [
     {
       name: 'Acker Technologies',
@@ -68,6 +109,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#0D0D0D]">
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      
       <Header />
       
       <main className="flex-1 bg-[#2A2A2A]">

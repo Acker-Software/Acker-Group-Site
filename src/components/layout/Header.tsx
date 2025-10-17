@@ -21,7 +21,7 @@ export function Header() {
             alt="Acker Group" 
             width={1920} 
             height={1080}
-            className="h-12 w-auto object-contain"
+            className="h-10 w-auto"
             priority
           />
         </Link>

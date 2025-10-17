@@ -3,8 +3,13 @@ import { Header } from "@/components/layout/Header"
 import { Footer } from "@/components/layout/Footer"
 
 export const metadata: Metadata = {
-  title: 'About Us - Acker Group',
-  description: 'Learn more about Acker Group and our mission',
+  title: 'About Acker Group SA | Our Mission, Vision & Values',
+  description: 'Discover Acker Group SA (Pty) Ltd, a private holding company in South Africa managing diversified investments across technology, real estate, and hospitality. Learn about our mission, vision, and core values of integrity, innovation, unity, and sustainability.',
+  openGraph: {
+    title: 'About Acker Group SA | Our Story & Values',
+    description: 'Learn about Acker Group SA, a diversified holding company in South Africa built on integrity, innovation, and sustainable growth.',
+    url: 'https://acker-group.com/about',
+  },
 }
 
 export default function AboutPage() {

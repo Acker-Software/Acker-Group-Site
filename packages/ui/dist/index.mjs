@@ -1,15 +1,44 @@
 var __create = Object.create;
 var __defProp = Object.defineProperty;
+var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
+var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
   get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
 }) : x)(function(x) {
   if (typeof require !== "undefined") return require.apply(this, arguments);
   throw Error('Dynamic require of "' + x + '" is not supported');
 });
+var __objRest = (source, exclude) => {
+  var target = {};
+  for (var prop in source)
+    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
+      target[prop] = source[prop];
+  if (source != null && __getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(source)) {
+      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
+        target[prop] = source[prop];
+    }
+  return target;
+};
 var __commonJS = (cb, mod) => function __require2() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
@@ -30,14 +59,37 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../../node_modules/@swc/helpers/cjs/_interop_require_default.cjs
-var require_interop_require_default = __commonJS({
-  "../../node_modules/@swc/helpers/cjs/_interop_require_default.cjs"(exports) {
+// ../../node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs
+var require_interop_require_wildcard = __commonJS({
+  "../../node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs"(exports) {
     "use strict";
-    exports._ = exports._interop_require_default = _interop_require_default;
-    function _interop_require_default(obj) {
-      return obj && obj.__esModule ? obj : { default: obj };
+    function _getRequireWildcardCache(nodeInterop) {
+      if (typeof WeakMap !== "function") return null;
+      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
+      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
+      return (_getRequireWildcardCache = function(nodeInterop2) {
+        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
+      })(nodeInterop);
     }
+    function _interop_require_wildcard(obj, nodeInterop) {
+      if (!nodeInterop && obj && obj.__esModule) return obj;
+      if (obj === null || typeof obj !== "object" && typeof obj !== "function") return { default: obj };
+      var cache = _getRequireWildcardCache(nodeInterop);
+      if (cache && cache.has(obj)) return cache.get(obj);
+      var newObj = { __proto__: null };
+      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+      for (var key in obj) {
+        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
+          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+          if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+          else newObj[key] = obj[key];
+        }
+      }
+      newObj.default = obj;
+      if (cache) cache.set(obj, newObj);
+      return newObj;
+    }
+    exports._ = _interop_require_wildcard;
   }
 });
 
@@ -67,82 +119,57 @@ var require_querystring = __commonJS({
     });
     function searchParamsToUrlQuery(searchParams) {
       const query = {};
-      searchParams.forEach((value, key) => {
-        if (typeof query[key] === "undefined") {
+      for (const [key, value] of searchParams.entries()) {
+        const existing = query[key];
+        if (typeof existing === "undefined") {
           query[key] = value;
-        } else if (Array.isArray(query[key])) {
-          query[key].push(value);
+        } else if (Array.isArray(existing)) {
+          existing.push(value);
         } else {
           query[key] = [
-            query[key],
+            existing,
             value
           ];
         }
-      });
+      }
       return query;
     }
     function stringifyUrlQueryParam(param) {
-      if (typeof param === "string" || typeof param === "number" && !isNaN(param) || typeof param === "boolean") {
+      if (typeof param === "string") {
+        return param;
+      }
+      if (typeof param === "number" && !isNaN(param) || typeof param === "boolean") {
         return String(param);
       } else {
         return "";
       }
     }
-    function urlQueryToSearchParams(urlQuery) {
-      const result = new URLSearchParams();
-      Object.entries(urlQuery).forEach((param) => {
-        let [key, value] = param;
+    function urlQueryToSearchParams(query) {
+      const searchParams = new URLSearchParams();
+      for (const [key, value] of Object.entries(query)) {
         if (Array.isArray(value)) {
-          value.forEach((item) => result.append(key, stringifyUrlQueryParam(item)));
+          for (const item of value) {
+            searchParams.append(key, stringifyUrlQueryParam(item));
+          }
         } else {
-          result.set(key, stringifyUrlQueryParam(value));
+          searchParams.set(key, stringifyUrlQueryParam(value));
         }
-      });
-      return result;
+      }
+      return searchParams;
     }
     function assign(target) {
       for (var _len = arguments.length, searchParamsList = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         searchParamsList[_key - 1] = arguments[_key];
       }
-      searchParamsList.forEach((searchParams) => {
-        Array.from(searchParams.keys()).forEach((key) => target.delete(key));
-        searchParams.forEach((value, key) => target.append(key, value));
-      });
-      return target;
-    }
-  }
-});
-
-// ../../node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs
-var require_interop_require_wildcard = __commonJS({
-  "../../node_modules/@swc/helpers/cjs/_interop_require_wildcard.cjs"(exports) {
-    "use strict";
-    function _getRequireWildcardCache(nodeInterop) {
-      if (typeof WeakMap !== "function") return null;
-      var cacheBabelInterop = /* @__PURE__ */ new WeakMap();
-      var cacheNodeInterop = /* @__PURE__ */ new WeakMap();
-      return (_getRequireWildcardCache = function(nodeInterop2) {
-        return nodeInterop2 ? cacheNodeInterop : cacheBabelInterop;
-      })(nodeInterop);
-    }
-    exports._ = exports._interop_require_wildcard = _interop_require_wildcard;
-    function _interop_require_wildcard(obj, nodeInterop) {
-      if (!nodeInterop && obj && obj.__esModule) return obj;
-      if (obj === null || typeof obj !== "object" && typeof obj !== "function") return { default: obj };
-      var cache = _getRequireWildcardCache(nodeInterop);
-      if (cache && cache.has(obj)) return cache.get(obj);
-      var newObj = { __proto__: null };
-      var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-      for (var key in obj) {
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-          var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-          if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-          else newObj[key] = obj[key];
+      for (const searchParams of searchParamsList) {
+        for (const key of searchParams.keys()) {
+          target.delete(key);
+        }
+        for (const [key, value] of searchParams.entries()) {
+          target.append(key, value);
         }
       }
-      newObj.default = obj;
-      if (cache) cache.set(obj, newObj);
-      return newObj;
+      return target;
     }
   }
 });
@@ -376,7 +403,11 @@ var require_utils = __commonJS({
         var _App_prototype;
         if ((_App_prototype = App.prototype) == null ? void 0 : _App_prototype.getInitialProps) {
           const message = '"' + getDisplayName(App) + '.getInitialProps()" is defined as an instance method - visit https://nextjs.org/docs/messages/get-initial-props-as-an-instance-method for more information.';
-          throw new Error(message);
+          throw Object.defineProperty(new Error(message), "__NEXT_ERROR_CODE", {
+            value: "E394",
+            enumerable: false,
+            configurable: true
+          });
         }
       }
       const res = ctx.res || ctx.ctx && ctx.ctx.res;
@@ -394,7 +425,11 @@ var require_utils = __commonJS({
       }
       if (!props) {
         const message = '"' + getDisplayName(App) + '.getInitialProps()" should resolve to an object. But found "' + props + '" instead.';
-        throw new Error(message);
+        throw Object.defineProperty(new Error(message), "__NEXT_ERROR_CODE", {
+          value: "E394",
+          enumerable: false,
+          configurable: true
+        });
       }
       if (process.env.NODE_ENV !== "production") {
         if (Object.keys(props).length === 0 && !ctx.ctx) {
@@ -619,9 +654,17 @@ var require_sorted_routes = __commonJS({
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
-    Object.defineProperty(exports, "getSortedRoutes", {
-      enumerable: true,
-      get: function() {
+    function _export(target, all) {
+      for (var name in all) Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+      });
+    }
+    _export(exports, {
+      getSortedRouteObjects: function() {
+        return getSortedRouteObjects;
+      },
+      getSortedRoutes: function() {
         return getSortedRoutes;
       }
     });
@@ -656,7 +699,11 @@ var require_sorted_routes = __commonJS({
         if (!this.placeholder) {
           const r = prefix === "/" ? "/" : prefix.slice(0, -1);
           if (this.optionalRestSlugName != null) {
-            throw new Error('You cannot define a route with the same specificity as a optional catch-all route ("' + r + '" and "' + r + "[[..." + this.optionalRestSlugName + ']]").');
+            throw Object.defineProperty(new Error('You cannot define a route with the same specificity as a optional catch-all route ("' + r + '" and "' + r + "[[..." + this.optionalRestSlugName + ']]").'), "__NEXT_ERROR_CODE", {
+              value: "E458",
+              enumerable: false,
+              configurable: true
+            });
           }
           routes.unshift(r);
         }
@@ -674,22 +721,38 @@ var require_sorted_routes = __commonJS({
           return;
         }
         if (isCatchAll) {
-          throw new Error("Catch-all must be the last part of the URL.");
+          throw Object.defineProperty(new Error("Catch-all must be the last part of the URL."), "__NEXT_ERROR_CODE", {
+            value: "E392",
+            enumerable: false,
+            configurable: true
+          });
         }
         let nextSegment = urlPaths[0];
         if (nextSegment.startsWith("[") && nextSegment.endsWith("]")) {
           let handleSlug = function(previousSlug, nextSlug) {
             if (previousSlug !== null) {
               if (previousSlug !== nextSlug) {
-                throw new Error("You cannot use different slug names for the same dynamic path ('" + previousSlug + "' !== '" + nextSlug + "').");
+                throw Object.defineProperty(new Error("You cannot use different slug names for the same dynamic path ('" + previousSlug + "' !== '" + nextSlug + "')."), "__NEXT_ERROR_CODE", {
+                  value: "E337",
+                  enumerable: false,
+                  configurable: true
+                });
               }
             }
             slugNames.forEach((slug) => {
               if (slug === nextSlug) {
-                throw new Error('You cannot have the same slug name "' + nextSlug + '" repeat within a single dynamic path');
+                throw Object.defineProperty(new Error('You cannot have the same slug name "' + nextSlug + '" repeat within a single dynamic path'), "__NEXT_ERROR_CODE", {
+                  value: "E247",
+                  enumerable: false,
+                  configurable: true
+                });
               }
               if (slug.replace(/\W/g, "") === nextSegment.replace(/\W/g, "")) {
-                throw new Error('You cannot have the slug names "' + slug + '" and "' + nextSlug + '" differ only by non-word symbols within a single dynamic path');
+                throw Object.defineProperty(new Error('You cannot have the slug names "' + slug + '" and "' + nextSlug + '" differ only by non-word symbols within a single dynamic path'), "__NEXT_ERROR_CODE", {
+                  value: "E499",
+                  enumerable: false,
+                  configurable: true
+                });
               }
             });
             slugNames.push(nextSlug);
@@ -700,27 +763,50 @@ var require_sorted_routes = __commonJS({
             segmentName = segmentName.slice(1, -1);
             isOptional = true;
           }
+          if (segmentName.startsWith("\u2026")) {
+            throw Object.defineProperty(new Error("Detected a three-dot character ('\u2026') at ('" + segmentName + "'). Did you mean ('...')?"), "__NEXT_ERROR_CODE", {
+              value: "E147",
+              enumerable: false,
+              configurable: true
+            });
+          }
           if (segmentName.startsWith("...")) {
             segmentName = segmentName.substring(3);
             isCatchAll = true;
           }
           if (segmentName.startsWith("[") || segmentName.endsWith("]")) {
-            throw new Error("Segment names may not start or end with extra brackets ('" + segmentName + "').");
+            throw Object.defineProperty(new Error("Segment names may not start or end with extra brackets ('" + segmentName + "')."), "__NEXT_ERROR_CODE", {
+              value: "E421",
+              enumerable: false,
+              configurable: true
+            });
           }
           if (segmentName.startsWith(".")) {
-            throw new Error("Segment names may not start with erroneous periods ('" + segmentName + "').");
+            throw Object.defineProperty(new Error("Segment names may not start with erroneous periods ('" + segmentName + "')."), "__NEXT_ERROR_CODE", {
+              value: "E288",
+              enumerable: false,
+              configurable: true
+            });
           }
           if (isCatchAll) {
             if (isOptional) {
               if (this.restSlugName != null) {
-                throw new Error('You cannot use both an required and optional catch-all route at the same level ("[...' + this.restSlugName + ']" and "' + urlPaths[0] + '" ).');
+                throw Object.defineProperty(new Error('You cannot use both an required and optional catch-all route at the same level ("[...' + this.restSlugName + ']" and "' + urlPaths[0] + '" ).'), "__NEXT_ERROR_CODE", {
+                  value: "E299",
+                  enumerable: false,
+                  configurable: true
+                });
               }
               handleSlug(this.optionalRestSlugName, segmentName);
               this.optionalRestSlugName = segmentName;
               nextSegment = "[[...]]";
             } else {
               if (this.optionalRestSlugName != null) {
-                throw new Error('You cannot use both an optional and required catch-all route at the same level ("[[...' + this.optionalRestSlugName + ']]" and "' + urlPaths[0] + '").');
+                throw Object.defineProperty(new Error('You cannot use both an optional and required catch-all route at the same level ("[[...' + this.optionalRestSlugName + ']]" and "' + urlPaths[0] + '").'), "__NEXT_ERROR_CODE", {
+                  value: "E300",
+                  enumerable: false,
+                  configurable: true
+                });
               }
               handleSlug(this.restSlugName, segmentName);
               this.restSlugName = segmentName;
@@ -728,7 +814,11 @@ var require_sorted_routes = __commonJS({
             }
           } else {
             if (isOptional) {
-              throw new Error('Optional route parameters are not yet supported ("' + urlPaths[0] + '").');
+              throw Object.defineProperty(new Error('Optional route parameters are not yet supported ("' + urlPaths[0] + '").'), "__NEXT_ERROR_CODE", {
+                value: "E435",
+                enumerable: false,
+                configurable: true
+              });
             }
             handleSlug(this.slugName, segmentName);
             this.slugName = segmentName;
@@ -752,6 +842,17 @@ var require_sorted_routes = __commonJS({
       const root = new UrlNode();
       normalizedPages.forEach((pagePath) => root.insert(pagePath));
       return root.smoosh();
+    }
+    function getSortedRouteObjects(objects, getter) {
+      const indexes = {};
+      const pathnames = [];
+      for (let i = 0; i < objects.length; i++) {
+        const pathname = getter(objects[i]);
+        indexes[pathname] = i;
+        pathnames[i] = pathname;
+      }
+      const sorted = getSortedRoutes(pathnames);
+      return sorted.map((pathname) => objects[indexes[pathname]]);
     }
   }
 });
@@ -795,12 +896,29 @@ var require_segment = __commonJS({
       PAGE_SEGMENT_KEY: function() {
         return PAGE_SEGMENT_KEY;
       },
+      addSearchParamsIfPageSegment: function() {
+        return addSearchParamsIfPageSegment;
+      },
       isGroupSegment: function() {
         return isGroupSegment;
+      },
+      isParallelRouteSegment: function() {
+        return isParallelRouteSegment;
       }
     });
     function isGroupSegment(segment) {
       return segment[0] === "(" && segment.endsWith(")");
+    }
+    function isParallelRouteSegment(segment) {
+      return segment.startsWith("@") && segment !== "@children";
+    }
+    function addSearchParamsIfPageSegment(segment, searchParams) {
+      const isPageSegment = segment.includes(PAGE_SEGMENT_KEY);
+      if (isPageSegment) {
+        const stringifiedQuery = JSON.stringify(searchParams);
+        return stringifiedQuery !== "{}" ? PAGE_SEGMENT_KEY + "?" + stringifiedQuery : PAGE_SEGMENT_KEY;
+      }
+      return segment;
     }
     var PAGE_SEGMENT_KEY = "__PAGE__";
     var DEFAULT_SEGMENT_KEY = "__DEFAULT__";
@@ -857,9 +975,9 @@ var require_app_paths = __commonJS({
   }
 });
 
-// ../../node_modules/next/dist/server/future/helpers/interception-routes.js
+// ../../node_modules/next/dist/shared/lib/router/utils/interception-routes.js
 var require_interception_routes = __commonJS({
-  "../../node_modules/next/dist/server/future/helpers/interception-routes.js"(exports) {
+  "../../node_modules/next/dist/shared/lib/router/utils/interception-routes.js"(exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
@@ -896,25 +1014,34 @@ var require_interception_routes = __commonJS({
       for (const segment of path.split("/")) {
         marker = INTERCEPTION_ROUTE_MARKERS.find((m) => segment.startsWith(m));
         if (marker) {
+          ;
           [interceptingRoute, interceptedRoute] = path.split(marker, 2);
           break;
         }
       }
       if (!interceptingRoute || !marker || !interceptedRoute) {
-        throw new Error(`Invalid interception route: ${path}. Must be in the format /<intercepting route>/(..|...|..)(..)/<intercepted route>`);
+        throw Object.defineProperty(new Error("Invalid interception route: " + path + ". Must be in the format /<intercepting route>/(..|...|..)(..)/<intercepted route>"), "__NEXT_ERROR_CODE", {
+          value: "E269",
+          enumerable: false,
+          configurable: true
+        });
       }
       interceptingRoute = (0, _apppaths.normalizeAppPath)(interceptingRoute);
       switch (marker) {
         case "(.)":
           if (interceptingRoute === "/") {
-            interceptedRoute = `/${interceptedRoute}`;
+            interceptedRoute = "/" + interceptedRoute;
           } else {
             interceptedRoute = interceptingRoute + "/" + interceptedRoute;
           }
           break;
         case "(..)":
           if (interceptingRoute === "/") {
-            throw new Error(`Invalid interception route: ${path}. Cannot use (..) marker at the root level, use (.) instead.`);
+            throw Object.defineProperty(new Error("Invalid interception route: " + path + ". Cannot use (..) marker at the root level, use (.) instead."), "__NEXT_ERROR_CODE", {
+              value: "E207",
+              enumerable: false,
+              configurable: true
+            });
           }
           interceptedRoute = interceptingRoute.split("/").slice(0, -1).concat(interceptedRoute).join("/");
           break;
@@ -924,12 +1051,20 @@ var require_interception_routes = __commonJS({
         case "(..)(..)":
           const splitInterceptingRoute = interceptingRoute.split("/");
           if (splitInterceptingRoute.length <= 2) {
-            throw new Error(`Invalid interception route: ${path}. Cannot use (..)(..) marker at the root level or one level up.`);
+            throw Object.defineProperty(new Error("Invalid interception route: " + path + ". Cannot use (..)(..) marker at the root level or one level up."), "__NEXT_ERROR_CODE", {
+              value: "E486",
+              enumerable: false,
+              configurable: true
+            });
           }
           interceptedRoute = splitInterceptingRoute.slice(0, -2).concat(interceptedRoute).join("/");
           break;
         default:
-          throw new Error("Invariant: unexpected marker");
+          throw Object.defineProperty(new Error("Invariant: unexpected marker"), "__NEXT_ERROR_CODE", {
+            value: "E112",
+            enumerable: false,
+            configurable: true
+          });
       }
       return {
         interceptingRoute,
@@ -953,10 +1088,15 @@ var require_is_dynamic = __commonJS({
       }
     });
     var _interceptionroutes = require_interception_routes();
-    var TEST_ROUTE = /\/\[[^/]+?\](?=\/|$)/;
-    function isDynamicRoute(route) {
+    var TEST_ROUTE = /\/[^/]*\[[^/]+\][^/]*(?=\/|$)/;
+    var TEST_STRICT_ROUTE = /\/\[[^/]+\](?=\/|$)/;
+    function isDynamicRoute(route, strict) {
+      if (strict === void 0) strict = true;
       if ((0, _interceptionroutes.isInterceptionRouteAppPath)(route)) {
         route = (0, _interceptionroutes.extractInterceptionRouteInformation)(route).interceptedRoute;
+      }
+      if (strict) {
+        return TEST_STRICT_ROUTE.test(route);
       }
       return TEST_ROUTE.test(route);
     }
@@ -977,6 +1117,9 @@ var require_utils2 = __commonJS({
       });
     }
     _export(exports, {
+      getSortedRouteObjects: function() {
+        return _sortedroutes.getSortedRouteObjects;
+      },
       getSortedRoutes: function() {
         return _sortedroutes.getSortedRoutes;
       },
@@ -986,6 +1129,525 @@ var require_utils2 = __commonJS({
     });
     var _sortedroutes = require_sorted_routes();
     var _isdynamic = require_is_dynamic();
+  }
+});
+
+// ../../node_modules/next/dist/compiled/path-to-regexp/index.js
+var require_path_to_regexp = __commonJS({
+  "../../node_modules/next/dist/compiled/path-to-regexp/index.js"(exports, module) {
+    (() => {
+      "use strict";
+      if (typeof __nccwpck_require__ !== "undefined") __nccwpck_require__.ab = __dirname + "/";
+      var e = {};
+      (() => {
+        var n = e;
+        Object.defineProperty(n, "__esModule", { value: true });
+        n.pathToRegexp = n.tokensToRegexp = n.regexpToFunction = n.match = n.tokensToFunction = n.compile = n.parse = void 0;
+        function lexer(e2) {
+          var n2 = [];
+          var r = 0;
+          while (r < e2.length) {
+            var t = e2[r];
+            if (t === "*" || t === "+" || t === "?") {
+              n2.push({ type: "MODIFIER", index: r, value: e2[r++] });
+              continue;
+            }
+            if (t === "\\") {
+              n2.push({ type: "ESCAPED_CHAR", index: r++, value: e2[r++] });
+              continue;
+            }
+            if (t === "{") {
+              n2.push({ type: "OPEN", index: r, value: e2[r++] });
+              continue;
+            }
+            if (t === "}") {
+              n2.push({ type: "CLOSE", index: r, value: e2[r++] });
+              continue;
+            }
+            if (t === ":") {
+              var a = "";
+              var i = r + 1;
+              while (i < e2.length) {
+                var o = e2.charCodeAt(i);
+                if (o >= 48 && o <= 57 || o >= 65 && o <= 90 || o >= 97 && o <= 122 || o === 95) {
+                  a += e2[i++];
+                  continue;
+                }
+                break;
+              }
+              if (!a) throw new TypeError("Missing parameter name at ".concat(r));
+              n2.push({ type: "NAME", index: r, value: a });
+              r = i;
+              continue;
+            }
+            if (t === "(") {
+              var c = 1;
+              var f = "";
+              var i = r + 1;
+              if (e2[i] === "?") {
+                throw new TypeError('Pattern cannot start with "?" at '.concat(i));
+              }
+              while (i < e2.length) {
+                if (e2[i] === "\\") {
+                  f += e2[i++] + e2[i++];
+                  continue;
+                }
+                if (e2[i] === ")") {
+                  c--;
+                  if (c === 0) {
+                    i++;
+                    break;
+                  }
+                } else if (e2[i] === "(") {
+                  c++;
+                  if (e2[i + 1] !== "?") {
+                    throw new TypeError("Capturing groups are not allowed at ".concat(i));
+                  }
+                }
+                f += e2[i++];
+              }
+              if (c) throw new TypeError("Unbalanced pattern at ".concat(r));
+              if (!f) throw new TypeError("Missing pattern at ".concat(r));
+              n2.push({ type: "PATTERN", index: r, value: f });
+              r = i;
+              continue;
+            }
+            n2.push({ type: "CHAR", index: r, value: e2[r++] });
+          }
+          n2.push({ type: "END", index: r, value: "" });
+          return n2;
+        }
+        function parse(e2, n2) {
+          if (n2 === void 0) {
+            n2 = {};
+          }
+          var r = lexer(e2);
+          var t = n2.prefixes, a = t === void 0 ? "./" : t, i = n2.delimiter, o = i === void 0 ? "/#?" : i;
+          var c = [];
+          var f = 0;
+          var u = 0;
+          var p = "";
+          var tryConsume = function(e3) {
+            if (u < r.length && r[u].type === e3) return r[u++].value;
+          };
+          var mustConsume = function(e3) {
+            var n3 = tryConsume(e3);
+            if (n3 !== void 0) return n3;
+            var t2 = r[u], a2 = t2.type, i2 = t2.index;
+            throw new TypeError("Unexpected ".concat(a2, " at ").concat(i2, ", expected ").concat(e3));
+          };
+          var consumeText = function() {
+            var e3 = "";
+            var n3;
+            while (n3 = tryConsume("CHAR") || tryConsume("ESCAPED_CHAR")) {
+              e3 += n3;
+            }
+            return e3;
+          };
+          var isSafe = function(e3) {
+            for (var n3 = 0, r2 = o; n3 < r2.length; n3++) {
+              var t2 = r2[n3];
+              if (e3.indexOf(t2) > -1) return true;
+            }
+            return false;
+          };
+          var safePattern = function(e3) {
+            var n3 = c[c.length - 1];
+            var r2 = e3 || (n3 && typeof n3 === "string" ? n3 : "");
+            if (n3 && !r2) {
+              throw new TypeError('Must have text between two parameters, missing text after "'.concat(n3.name, '"'));
+            }
+            if (!r2 || isSafe(r2)) return "[^".concat(escapeString(o), "]+?");
+            return "(?:(?!".concat(escapeString(r2), ")[^").concat(escapeString(o), "])+?");
+          };
+          while (u < r.length) {
+            var v = tryConsume("CHAR");
+            var s = tryConsume("NAME");
+            var d = tryConsume("PATTERN");
+            if (s || d) {
+              var g = v || "";
+              if (a.indexOf(g) === -1) {
+                p += g;
+                g = "";
+              }
+              if (p) {
+                c.push(p);
+                p = "";
+              }
+              c.push({ name: s || f++, prefix: g, suffix: "", pattern: d || safePattern(g), modifier: tryConsume("MODIFIER") || "" });
+              continue;
+            }
+            var x = v || tryConsume("ESCAPED_CHAR");
+            if (x) {
+              p += x;
+              continue;
+            }
+            if (p) {
+              c.push(p);
+              p = "";
+            }
+            var h = tryConsume("OPEN");
+            if (h) {
+              var g = consumeText();
+              var l = tryConsume("NAME") || "";
+              var m = tryConsume("PATTERN") || "";
+              var T = consumeText();
+              mustConsume("CLOSE");
+              c.push({ name: l || (m ? f++ : ""), pattern: l && !m ? safePattern(g) : m, prefix: g, suffix: T, modifier: tryConsume("MODIFIER") || "" });
+              continue;
+            }
+            mustConsume("END");
+          }
+          return c;
+        }
+        n.parse = parse;
+        function compile(e2, n2) {
+          return tokensToFunction(parse(e2, n2), n2);
+        }
+        n.compile = compile;
+        function tokensToFunction(e2, n2) {
+          if (n2 === void 0) {
+            n2 = {};
+          }
+          var r = flags(n2);
+          var t = n2.encode, a = t === void 0 ? function(e3) {
+            return e3;
+          } : t, i = n2.validate, o = i === void 0 ? true : i;
+          var c = e2.map((function(e3) {
+            if (typeof e3 === "object") {
+              return new RegExp("^(?:".concat(e3.pattern, ")$"), r);
+            }
+          }));
+          return function(n3) {
+            var r2 = "";
+            for (var t2 = 0; t2 < e2.length; t2++) {
+              var i2 = e2[t2];
+              if (typeof i2 === "string") {
+                r2 += i2;
+                continue;
+              }
+              var f = n3 ? n3[i2.name] : void 0;
+              var u = i2.modifier === "?" || i2.modifier === "*";
+              var p = i2.modifier === "*" || i2.modifier === "+";
+              if (Array.isArray(f)) {
+                if (!p) {
+                  throw new TypeError('Expected "'.concat(i2.name, '" to not repeat, but got an array'));
+                }
+                if (f.length === 0) {
+                  if (u) continue;
+                  throw new TypeError('Expected "'.concat(i2.name, '" to not be empty'));
+                }
+                for (var v = 0; v < f.length; v++) {
+                  var s = a(f[v], i2);
+                  if (o && !c[t2].test(s)) {
+                    throw new TypeError('Expected all "'.concat(i2.name, '" to match "').concat(i2.pattern, '", but got "').concat(s, '"'));
+                  }
+                  r2 += i2.prefix + s + i2.suffix;
+                }
+                continue;
+              }
+              if (typeof f === "string" || typeof f === "number") {
+                var s = a(String(f), i2);
+                if (o && !c[t2].test(s)) {
+                  throw new TypeError('Expected "'.concat(i2.name, '" to match "').concat(i2.pattern, '", but got "').concat(s, '"'));
+                }
+                r2 += i2.prefix + s + i2.suffix;
+                continue;
+              }
+              if (u) continue;
+              var d = p ? "an array" : "a string";
+              throw new TypeError('Expected "'.concat(i2.name, '" to be ').concat(d));
+            }
+            return r2;
+          };
+        }
+        n.tokensToFunction = tokensToFunction;
+        function match(e2, n2) {
+          var r = [];
+          var t = pathToRegexp(e2, r, n2);
+          return regexpToFunction(t, r, n2);
+        }
+        n.match = match;
+        function regexpToFunction(e2, n2, r) {
+          if (r === void 0) {
+            r = {};
+          }
+          var t = r.decode, a = t === void 0 ? function(e3) {
+            return e3;
+          } : t;
+          return function(r2) {
+            var t2 = e2.exec(r2);
+            if (!t2) return false;
+            var i = t2[0], o = t2.index;
+            var c = /* @__PURE__ */ Object.create(null);
+            var _loop_1 = function(e3) {
+              if (t2[e3] === void 0) return "continue";
+              var r3 = n2[e3 - 1];
+              if (r3.modifier === "*" || r3.modifier === "+") {
+                c[r3.name] = t2[e3].split(r3.prefix + r3.suffix).map((function(e4) {
+                  return a(e4, r3);
+                }));
+              } else {
+                c[r3.name] = a(t2[e3], r3);
+              }
+            };
+            for (var f = 1; f < t2.length; f++) {
+              _loop_1(f);
+            }
+            return { path: i, index: o, params: c };
+          };
+        }
+        n.regexpToFunction = regexpToFunction;
+        function escapeString(e2) {
+          return e2.replace(/([.+*?=^!:${}()[\]|/\\])/g, "\\$1");
+        }
+        function flags(e2) {
+          return e2 && e2.sensitive ? "" : "i";
+        }
+        function regexpToRegexp(e2, n2) {
+          if (!n2) return e2;
+          var r = /\((?:\?<(.*?)>)?(?!\?)/g;
+          var t = 0;
+          var a = r.exec(e2.source);
+          while (a) {
+            n2.push({ name: a[1] || t++, prefix: "", suffix: "", modifier: "", pattern: "" });
+            a = r.exec(e2.source);
+          }
+          return e2;
+        }
+        function arrayToRegexp(e2, n2, r) {
+          var t = e2.map((function(e3) {
+            return pathToRegexp(e3, n2, r).source;
+          }));
+          return new RegExp("(?:".concat(t.join("|"), ")"), flags(r));
+        }
+        function stringToRegexp(e2, n2, r) {
+          return tokensToRegexp(parse(e2, r), n2, r);
+        }
+        function tokensToRegexp(e2, n2, r) {
+          if (r === void 0) {
+            r = {};
+          }
+          var t = r.strict, a = t === void 0 ? false : t, i = r.start, o = i === void 0 ? true : i, c = r.end, f = c === void 0 ? true : c, u = r.encode, p = u === void 0 ? function(e3) {
+            return e3;
+          } : u, v = r.delimiter, s = v === void 0 ? "/#?" : v, d = r.endsWith, g = d === void 0 ? "" : d;
+          var x = "[".concat(escapeString(g), "]|$");
+          var h = "[".concat(escapeString(s), "]");
+          var l = o ? "^" : "";
+          for (var m = 0, T = e2; m < T.length; m++) {
+            var E = T[m];
+            if (typeof E === "string") {
+              l += escapeString(p(E));
+            } else {
+              var w = escapeString(p(E.prefix));
+              var y = escapeString(p(E.suffix));
+              if (E.pattern) {
+                if (n2) n2.push(E);
+                if (w || y) {
+                  if (E.modifier === "+" || E.modifier === "*") {
+                    var R = E.modifier === "*" ? "?" : "";
+                    l += "(?:".concat(w, "((?:").concat(E.pattern, ")(?:").concat(y).concat(w, "(?:").concat(E.pattern, "))*)").concat(y, ")").concat(R);
+                  } else {
+                    l += "(?:".concat(w, "(").concat(E.pattern, ")").concat(y, ")").concat(E.modifier);
+                  }
+                } else {
+                  if (E.modifier === "+" || E.modifier === "*") {
+                    throw new TypeError('Can not repeat "'.concat(E.name, '" without a prefix and suffix'));
+                  }
+                  l += "(".concat(E.pattern, ")").concat(E.modifier);
+                }
+              } else {
+                l += "(?:".concat(w).concat(y, ")").concat(E.modifier);
+              }
+            }
+          }
+          if (f) {
+            if (!a) l += "".concat(h, "?");
+            l += !r.endsWith ? "$" : "(?=".concat(x, ")");
+          } else {
+            var A = e2[e2.length - 1];
+            var _ = typeof A === "string" ? h.indexOf(A[A.length - 1]) > -1 : A === void 0;
+            if (!a) {
+              l += "(?:".concat(h, "(?=").concat(x, "))?");
+            }
+            if (!_) {
+              l += "(?=".concat(h, "|").concat(x, ")");
+            }
+          }
+          return new RegExp(l, flags(r));
+        }
+        n.tokensToRegexp = tokensToRegexp;
+        function pathToRegexp(e2, n2, r) {
+          if (e2 instanceof RegExp) return regexpToRegexp(e2, n2);
+          if (Array.isArray(e2)) return arrayToRegexp(e2, n2, r);
+          return stringToRegexp(e2, n2, r);
+        }
+        n.pathToRegexp = pathToRegexp;
+      })();
+      module.exports = e;
+    })();
+  }
+});
+
+// ../../node_modules/next/dist/lib/route-pattern-normalizer.js
+var require_route_pattern_normalizer = __commonJS({
+  "../../node_modules/next/dist/lib/route-pattern-normalizer.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    function _export(target, all) {
+      for (var name in all) Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+      });
+    }
+    _export(exports, {
+      hasAdjacentParameterIssues: function() {
+        return hasAdjacentParameterIssues;
+      },
+      normalizeAdjacentParameters: function() {
+        return normalizeAdjacentParameters;
+      },
+      normalizeTokensForRegexp: function() {
+        return normalizeTokensForRegexp;
+      },
+      stripParameterSeparators: function() {
+        return stripParameterSeparators;
+      }
+    });
+    var PARAM_SEPARATOR = "_NEXTSEP_";
+    function hasAdjacentParameterIssues(route) {
+      if (typeof route !== "string") return false;
+      if (/\/\(\.{1,3}\):[^/\s]+/.test(route)) {
+        return true;
+      }
+      if (/:[a-zA-Z_][a-zA-Z0-9_]*:[a-zA-Z_][a-zA-Z0-9_]*/.test(route)) {
+        return true;
+      }
+      return false;
+    }
+    function normalizeAdjacentParameters(route) {
+      let normalized = route;
+      normalized = normalized.replace(/(\([^)]*\)):([^/\s]+)/g, `$1${PARAM_SEPARATOR}:$2`);
+      normalized = normalized.replace(/:([^:/\s)]+)(?=:)/g, `:$1${PARAM_SEPARATOR}`);
+      return normalized;
+    }
+    function normalizeTokensForRegexp(tokens) {
+      return tokens.map((token) => {
+        if (typeof token === "object" && token !== null && // Not all token objects have 'modifier' property (e.g., simple text tokens)
+        "modifier" in token && // Only repeating modifiers (* or +) cause the validation error
+        // Other modifiers like '?' (optional) are fine
+        (token.modifier === "*" || token.modifier === "+") && // Token objects can have different shapes depending on route pattern
+        "prefix" in token && "suffix" in token && // Both prefix and suffix must be empty strings
+        // This is what causes the validation error in path-to-regexp
+        token.prefix === "" && token.suffix === "") {
+          return __spreadProps(__spreadValues({}, token), {
+            prefix: "/"
+          });
+        }
+        return token;
+      });
+    }
+    function stripParameterSeparators(params) {
+      const cleaned = {};
+      for (const [key, value] of Object.entries(params)) {
+        if (typeof value === "string") {
+          cleaned[key] = value.replace(new RegExp(`^${PARAM_SEPARATOR}`), "");
+        } else if (Array.isArray(value)) {
+          cleaned[key] = value.map((item) => typeof item === "string" ? item.replace(new RegExp(`^${PARAM_SEPARATOR}`), "") : item);
+        } else {
+          cleaned[key] = value;
+        }
+      }
+      return cleaned;
+    }
+  }
+});
+
+// ../../node_modules/next/dist/shared/lib/router/utils/route-match-utils.js
+var require_route_match_utils = __commonJS({
+  "../../node_modules/next/dist/shared/lib/router/utils/route-match-utils.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    function _export(target, all) {
+      for (var name in all) Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+      });
+    }
+    _export(exports, {
+      safeCompile: function() {
+        return safeCompile;
+      },
+      safePathToRegexp: function() {
+        return safePathToRegexp;
+      },
+      safeRegexpToFunction: function() {
+        return safeRegexpToFunction;
+      },
+      safeRouteMatcher: function() {
+        return safeRouteMatcher;
+      }
+    });
+    var _pathtoregexp = require_path_to_regexp();
+    var _routepatternnormalizer = require_route_pattern_normalizer();
+    function safePathToRegexp(route, keys, options) {
+      if (typeof route !== "string") {
+        return (0, _pathtoregexp.pathToRegexp)(route, keys, options);
+      }
+      const needsNormalization = (0, _routepatternnormalizer.hasAdjacentParameterIssues)(route);
+      const routeToUse = needsNormalization ? (0, _routepatternnormalizer.normalizeAdjacentParameters)(route) : route;
+      try {
+        return (0, _pathtoregexp.pathToRegexp)(routeToUse, keys, options);
+      } catch (error) {
+        if (!needsNormalization) {
+          try {
+            const normalizedRoute = (0, _routepatternnormalizer.normalizeAdjacentParameters)(route);
+            return (0, _pathtoregexp.pathToRegexp)(normalizedRoute, keys, options);
+          } catch (retryError) {
+            throw error;
+          }
+        }
+        throw error;
+      }
+    }
+    function safeCompile(route, options) {
+      const needsNormalization = (0, _routepatternnormalizer.hasAdjacentParameterIssues)(route);
+      const routeToUse = needsNormalization ? (0, _routepatternnormalizer.normalizeAdjacentParameters)(route) : route;
+      try {
+        return (0, _pathtoregexp.compile)(routeToUse, options);
+      } catch (error) {
+        if (!needsNormalization) {
+          try {
+            const normalizedRoute = (0, _routepatternnormalizer.normalizeAdjacentParameters)(route);
+            return (0, _pathtoregexp.compile)(normalizedRoute, options);
+          } catch (retryError) {
+            throw error;
+          }
+        }
+        throw error;
+      }
+    }
+    function safeRegexpToFunction(regexp, keys) {
+      const originalMatcher = (0, _pathtoregexp.regexpToFunction)(regexp, keys || []);
+      return (pathname) => {
+        const result = originalMatcher(pathname);
+        if (!result) return false;
+        return __spreadProps(__spreadValues({}, result), {
+          params: (0, _routepatternnormalizer.stripParameterSeparators)(result.params)
+        });
+      };
+    }
+    function safeRouteMatcher(matcherFn) {
+      return (pathname) => {
+        const result = matcherFn(pathname);
+        if (!result) return false;
+        return (0, _routepatternnormalizer.stripParameterSeparators)(result);
+      };
+    }
   }
 });
 
@@ -1003,32 +1665,37 @@ var require_route_matcher = __commonJS({
       }
     });
     var _utils = require_utils();
+    var _routematchutils = require_route_match_utils();
     function getRouteMatcher(param) {
       let { re, groups } = param;
-      return (pathname) => {
+      const rawMatcher = (pathname) => {
         const routeMatch = re.exec(pathname);
-        if (!routeMatch) {
-          return false;
-        }
+        if (!routeMatch) return false;
         const decode = (param2) => {
           try {
             return decodeURIComponent(param2);
-          } catch (_) {
-            throw new _utils.DecodeError("failed to decode param");
+          } catch (e) {
+            throw Object.defineProperty(new _utils.DecodeError("failed to decode param"), "__NEXT_ERROR_CODE", {
+              value: "E528",
+              enumerable: false,
+              configurable: true
+            });
           }
         };
         const params = {};
-        Object.keys(groups).forEach((slugName) => {
-          const g = groups[slugName];
-          const m = routeMatch[g.pos];
-          if (m !== void 0) {
-            params[slugName] = ~m.indexOf("/") ? m.split("/").map((entry) => decode(entry)) : g.repeat ? [
-              decode(m)
-            ] : decode(m);
+        for (const [key, group] of Object.entries(groups)) {
+          const match = routeMatch[group.pos];
+          if (match !== void 0) {
+            if (group.repeat) {
+              params[key] = match.split("/").map((entry) => decode(entry));
+            } else {
+              params[key] = decode(match);
+            }
           }
-        });
+        }
         return params;
       };
+      return (0, _routematchutils.safeRouteMatcher)(rawMatcher);
     }
   }
 });
@@ -1071,8 +1738,20 @@ var require_constants = __commonJS({
       GSSP_NO_RETURNED_VALUE: function() {
         return GSSP_NO_RETURNED_VALUE;
       },
+      HTML_CONTENT_TYPE_HEADER: function() {
+        return HTML_CONTENT_TYPE_HEADER;
+      },
+      INFINITE_CACHE: function() {
+        return INFINITE_CACHE;
+      },
       INSTRUMENTATION_HOOK_FILENAME: function() {
         return INSTRUMENTATION_HOOK_FILENAME;
+      },
+      JSON_CONTENT_TYPE_HEADER: function() {
+        return JSON_CONTENT_TYPE_HEADER;
+      },
+      MATCHED_PATH_HEADER: function() {
+        return MATCHED_PATH_HEADER;
       },
       MIDDLEWARE_FILENAME: function() {
         return MIDDLEWARE_FILENAME;
@@ -1091,9 +1770,6 @@ var require_constants = __commonJS({
       },
       NEXT_CACHE_REVALIDATE_TAG_TOKEN_HEADER: function() {
         return NEXT_CACHE_REVALIDATE_TAG_TOKEN_HEADER;
-      },
-      NEXT_CACHE_SOFT_TAGS_HEADER: function() {
-        return NEXT_CACHE_SOFT_TAGS_HEADER;
       },
       NEXT_CACHE_SOFT_TAG_MAX_LENGTH: function() {
         return NEXT_CACHE_SOFT_TAG_MAX_LENGTH;
@@ -1118,6 +1794,9 @@ var require_constants = __commonJS({
       },
       NEXT_QUERY_PARAM_PREFIX: function() {
         return NEXT_QUERY_PARAM_PREFIX;
+      },
+      NEXT_RESUME_HEADER: function() {
+        return NEXT_RESUME_HEADER;
       },
       NON_STANDARD_NODE_ENV: function() {
         return NON_STANDARD_NODE_ENV;
@@ -1149,11 +1828,23 @@ var require_constants = __commonJS({
       RSC_ACTION_VALIDATE_ALIAS: function() {
         return RSC_ACTION_VALIDATE_ALIAS;
       },
+      RSC_CACHE_WRAPPER_ALIAS: function() {
+        return RSC_CACHE_WRAPPER_ALIAS;
+      },
+      RSC_DYNAMIC_IMPORT_WRAPPER_ALIAS: function() {
+        return RSC_DYNAMIC_IMPORT_WRAPPER_ALIAS;
+      },
       RSC_MOD_REF_PROXY_ALIAS: function() {
         return RSC_MOD_REF_PROXY_ALIAS;
       },
       RSC_PREFETCH_SUFFIX: function() {
         return RSC_PREFETCH_SUFFIX;
+      },
+      RSC_SEGMENTS_DIR_SUFFIX: function() {
+        return RSC_SEGMENTS_DIR_SUFFIX;
+      },
+      RSC_SEGMENT_SUFFIX: function() {
+        return RSC_SEGMENT_SUFFIX;
       },
       RSC_SUFFIX: function() {
         return RSC_SUFFIX;
@@ -1179,6 +1870,9 @@ var require_constants = __commonJS({
       STATIC_STATUS_PAGE_GET_INITIAL_PROPS_ERROR: function() {
         return STATIC_STATUS_PAGE_GET_INITIAL_PROPS_ERROR;
       },
+      TEXT_PLAIN_CONTENT_TYPE_HEADER: function() {
+        return TEXT_PLAIN_CONTENT_TYPE_HEADER;
+      },
       UNSTABLE_REVALIDATE_RENAME_ERROR: function() {
         return UNSTABLE_REVALIDATE_RENAME_ERROR;
       },
@@ -1189,25 +1883,32 @@ var require_constants = __commonJS({
         return WEBPACK_RESOURCE_QUERIES;
       }
     });
+    var TEXT_PLAIN_CONTENT_TYPE_HEADER = "text/plain";
+    var HTML_CONTENT_TYPE_HEADER = "text/html; charset=utf-8";
+    var JSON_CONTENT_TYPE_HEADER = "application/json; charset=utf-8";
     var NEXT_QUERY_PARAM_PREFIX = "nxtP";
     var NEXT_INTERCEPTION_MARKER_PREFIX = "nxtI";
+    var MATCHED_PATH_HEADER = "x-matched-path";
     var PRERENDER_REVALIDATE_HEADER = "x-prerender-revalidate";
     var PRERENDER_REVALIDATE_ONLY_GENERATED_HEADER = "x-prerender-revalidate-if-generated";
     var RSC_PREFETCH_SUFFIX = ".prefetch.rsc";
+    var RSC_SEGMENTS_DIR_SUFFIX = ".segments";
+    var RSC_SEGMENT_SUFFIX = ".segment.rsc";
     var RSC_SUFFIX = ".rsc";
     var ACTION_SUFFIX = ".action";
     var NEXT_DATA_SUFFIX = ".json";
     var NEXT_META_SUFFIX = ".meta";
     var NEXT_BODY_SUFFIX = ".body";
     var NEXT_CACHE_TAGS_HEADER = "x-next-cache-tags";
-    var NEXT_CACHE_SOFT_TAGS_HEADER = "x-next-cache-soft-tags";
     var NEXT_CACHE_REVALIDATED_TAGS_HEADER = "x-next-revalidated-tags";
     var NEXT_CACHE_REVALIDATE_TAG_TOKEN_HEADER = "x-next-revalidate-tag-token";
+    var NEXT_RESUME_HEADER = "next-resume";
     var NEXT_CACHE_TAG_MAX_ITEMS = 128;
     var NEXT_CACHE_TAG_MAX_LENGTH = 256;
     var NEXT_CACHE_SOFT_TAG_MAX_LENGTH = 1024;
     var NEXT_CACHE_IMPLICIT_TAG_ID = "_N_T_";
     var CACHE_ONE_YEAR = 31536e3;
+    var INFINITE_CACHE = 4294967294;
     var MIDDLEWARE_FILENAME = "middleware";
     var MIDDLEWARE_LOCATION_REGEXP = `(?:src/)?${MIDDLEWARE_FILENAME}`;
     var INSTRUMENTATION_HOOK_FILENAME = "instrumentation";
@@ -1218,6 +1919,8 @@ var require_constants = __commonJS({
     var RSC_MOD_REF_PROXY_ALIAS = "private-next-rsc-mod-ref-proxy";
     var RSC_ACTION_VALIDATE_ALIAS = "private-next-rsc-action-validate";
     var RSC_ACTION_PROXY_ALIAS = "private-next-rsc-server-reference";
+    var RSC_CACHE_WRAPPER_ALIAS = "private-next-rsc-cache-wrapper";
+    var RSC_DYNAMIC_IMPORT_WRAPPER_ALIAS = "private-next-rsc-track-dynamic-import";
     var RSC_ACTION_ENCRYPTION_ALIAS = "private-next-rsc-action-encryption";
     var RSC_ACTION_CLIENT_WRAPPER_ALIAS = "private-next-rsc-action-client-wrapper";
     var PUBLIC_DIR_MIDDLEWARE_CONFLICT = `You can not have a '_next' folder inside of your public folder. This conflicts with the internal '/_next' route. https://nextjs.org/docs/messages/public-next-folder-conflict`;
@@ -1250,7 +1953,8 @@ var require_constants = __commonJS({
       */
       shared: "shared",
       /**
-      * React Server Components layer (rsc).
+      * The layer for server-only runtime and picking up `react-server` export conditions.
+      * Including app router RSC pages and app router custom routes and metadata routes.
       */
       reactServerComponents: "rsc",
       /**
@@ -1262,9 +1966,13 @@ var require_constants = __commonJS({
       */
       actionBrowser: "action-browser",
       /**
-      * The layer for the API routes.
+      * The Node.js bundle layer for the API routes.
       */
-      api: "api",
+      apiNode: "api-node",
+      /**
+      * The Edge Lite bundle layer for the API routes.
+      */
+      apiEdge: "api-edge",
       /**
       * The layer for the middleware code.
       */
@@ -1282,45 +1990,57 @@ var require_constants = __commonJS({
       */
       appPagesBrowser: "app-pages-browser",
       /**
-      * The server bundle layer for metadata routes.
+      * The browser client bundle layer for Pages directory.
       */
-      appMetadataRoute: "app-metadata-route",
+      pagesDirBrowser: "pages-dir-browser",
       /**
-      * The layer for the server bundle for App Route handlers.
+      * The Edge Lite bundle layer for Pages directory.
       */
-      appRouteHandler: "app-route-handler"
+      pagesDirEdge: "pages-dir-edge",
+      /**
+      * The Node.js bundle layer for Pages directory.
+      */
+      pagesDirNode: "pages-dir-node"
     };
-    var WEBPACK_LAYERS = {
-      ...WEBPACK_LAYERS_NAMES,
+    var WEBPACK_LAYERS = __spreadProps(__spreadValues({}, WEBPACK_LAYERS_NAMES), {
       GROUP: {
+        builtinReact: [
+          WEBPACK_LAYERS_NAMES.reactServerComponents,
+          WEBPACK_LAYERS_NAMES.actionBrowser
+        ],
         serverOnly: [
           WEBPACK_LAYERS_NAMES.reactServerComponents,
           WEBPACK_LAYERS_NAMES.actionBrowser,
-          WEBPACK_LAYERS_NAMES.appMetadataRoute,
-          WEBPACK_LAYERS_NAMES.appRouteHandler,
-          WEBPACK_LAYERS_NAMES.instrument
+          WEBPACK_LAYERS_NAMES.instrument,
+          WEBPACK_LAYERS_NAMES.middleware
+        ],
+        neutralTarget: [
+          // pages api
+          WEBPACK_LAYERS_NAMES.apiNode,
+          WEBPACK_LAYERS_NAMES.apiEdge
         ],
         clientOnly: [
           WEBPACK_LAYERS_NAMES.serverSideRendering,
           WEBPACK_LAYERS_NAMES.appPagesBrowser
         ],
-        nonClientServerTarget: [
-          // middleware and pages api
-          WEBPACK_LAYERS_NAMES.middleware,
-          WEBPACK_LAYERS_NAMES.api
-        ],
-        app: [
+        bundled: [
           WEBPACK_LAYERS_NAMES.reactServerComponents,
           WEBPACK_LAYERS_NAMES.actionBrowser,
-          WEBPACK_LAYERS_NAMES.appMetadataRoute,
-          WEBPACK_LAYERS_NAMES.appRouteHandler,
           WEBPACK_LAYERS_NAMES.serverSideRendering,
           WEBPACK_LAYERS_NAMES.appPagesBrowser,
           WEBPACK_LAYERS_NAMES.shared,
-          WEBPACK_LAYERS_NAMES.instrument
+          WEBPACK_LAYERS_NAMES.instrument,
+          WEBPACK_LAYERS_NAMES.middleware
+        ],
+        appPages: [
+          // app router pages and layouts
+          WEBPACK_LAYERS_NAMES.reactServerComponents,
+          WEBPACK_LAYERS_NAMES.serverSideRendering,
+          WEBPACK_LAYERS_NAMES.appPagesBrowser,
+          WEBPACK_LAYERS_NAMES.actionBrowser
         ]
       }
-    };
+    });
     var WEBPACK_RESOURCE_QUERIES = {
       edgeSSREntry: "__next_edge_ssr_entry__",
       metadata: "__next_metadata__",
@@ -1354,6 +2074,115 @@ var require_escape_regexp = __commonJS({
   }
 });
 
+// ../../node_modules/next/dist/shared/lib/router/utils/get-dynamic-param.js
+var require_get_dynamic_param = __commonJS({
+  "../../node_modules/next/dist/shared/lib/router/utils/get-dynamic-param.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    function _export(target, all) {
+      for (var name in all) Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+      });
+    }
+    _export(exports, {
+      PARAMETER_PATTERN: function() {
+        return PARAMETER_PATTERN;
+      },
+      getDynamicParam: function() {
+        return getDynamicParam;
+      },
+      parseMatchedParameter: function() {
+        return parseMatchedParameter;
+      },
+      parseParameter: function() {
+        return parseParameter;
+      }
+    });
+    function getDynamicParam(params, segmentKey, dynamicParamType, pagePath, fallbackRouteParams) {
+      let value = params[segmentKey];
+      if (fallbackRouteParams && fallbackRouteParams.has(segmentKey)) {
+        value = fallbackRouteParams.get(segmentKey);
+      } else if (Array.isArray(value)) {
+        value = value.map((i) => encodeURIComponent(i));
+      } else if (typeof value === "string") {
+        value = encodeURIComponent(value);
+      }
+      if (!value) {
+        const isCatchall = dynamicParamType === "c";
+        const isOptionalCatchall = dynamicParamType === "oc";
+        if (isCatchall || isOptionalCatchall) {
+          if (isOptionalCatchall) {
+            return {
+              param: segmentKey,
+              value: null,
+              type: dynamicParamType,
+              treeSegment: [
+                segmentKey,
+                "",
+                dynamicParamType
+              ]
+            };
+          }
+          value = pagePath.split("/").slice(1).flatMap((pathSegment) => {
+            const param = parseParameter(pathSegment);
+            var _params_param_key;
+            return (_params_param_key = params[param.key]) != null ? _params_param_key : param.key;
+          });
+          return {
+            param: segmentKey,
+            value,
+            type: dynamicParamType,
+            // This value always has to be a string.
+            treeSegment: [
+              segmentKey,
+              value.join("/"),
+              dynamicParamType
+            ]
+          };
+        }
+      }
+      return {
+        param: segmentKey,
+        // The value that is passed to user code.
+        value,
+        // The value that is rendered in the router tree.
+        treeSegment: [
+          segmentKey,
+          Array.isArray(value) ? value.join("/") : value,
+          dynamicParamType
+        ],
+        type: dynamicParamType
+      };
+    }
+    var PARAMETER_PATTERN = /^([^[]*)\[((?:\[[^\]]*\])|[^\]]+)\](.*)$/;
+    function parseParameter(param) {
+      const match = param.match(PARAMETER_PATTERN);
+      if (!match) {
+        return parseMatchedParameter(param);
+      }
+      return parseMatchedParameter(match[2]);
+    }
+    function parseMatchedParameter(param) {
+      const optional = param.startsWith("[") && param.endsWith("]");
+      if (optional) {
+        param = param.slice(1, -1);
+      }
+      const repeat = param.startsWith("...");
+      if (repeat) {
+        param = param.slice(3);
+      }
+      return {
+        key: param,
+        repeat,
+        optional
+      };
+    }
+  }
+});
+
 // ../../node_modules/next/dist/shared/lib/router/utils/route-regex.js
 var require_route_regex = __commonJS({
   "../../node_modules/next/dist/shared/lib/router/utils/route-regex.js"(exports) {
@@ -1376,65 +2205,64 @@ var require_route_regex = __commonJS({
       },
       getRouteRegex: function() {
         return getRouteRegex;
-      },
-      parseParameter: function() {
-        return parseParameter;
       }
     });
     var _constants = require_constants();
     var _interceptionroutes = require_interception_routes();
     var _escaperegexp = require_escape_regexp();
     var _removetrailingslash = require_remove_trailing_slash();
-    function parseParameter(param) {
-      const optional = param.startsWith("[") && param.endsWith("]");
-      if (optional) {
-        param = param.slice(1, -1);
-      }
-      const repeat = param.startsWith("...");
-      if (repeat) {
-        param = param.slice(3);
-      }
-      return {
-        key: param,
-        repeat,
-        optional
-      };
-    }
-    function getParametrizedRoute(route) {
-      const segments = (0, _removetrailingslash.removeTrailingSlash)(route).slice(1).split("/");
+    var _getdynamicparam = require_get_dynamic_param();
+    function getParametrizedRoute(route, includeSuffix, includePrefix) {
       const groups = {};
       let groupIndex = 1;
-      return {
-        parameterizedRoute: segments.map((segment) => {
-          const markerMatch = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.find((m) => segment.startsWith(m));
-          const paramMatches = segment.match(/\[((?:\[.*\])|.+)\]/);
-          if (markerMatch && paramMatches) {
-            const { key, optional, repeat } = parseParameter(paramMatches[1]);
-            groups[key] = {
-              pos: groupIndex++,
-              repeat,
-              optional
-            };
-            return "/" + (0, _escaperegexp.escapeStringRegexp)(markerMatch) + "([^/]+?)";
-          } else if (paramMatches) {
-            const { key, repeat, optional } = parseParameter(paramMatches[1]);
-            groups[key] = {
-              pos: groupIndex++,
-              repeat,
-              optional
-            };
-            return repeat ? optional ? "(?:/(.+?))?" : "/(.+?)" : "/([^/]+?)";
-          } else {
-            return "/" + (0, _escaperegexp.escapeStringRegexp)(segment);
+      const segments = [];
+      for (const segment of (0, _removetrailingslash.removeTrailingSlash)(route).slice(1).split("/")) {
+        const markerMatch = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.find((m) => segment.startsWith(m));
+        const paramMatches = segment.match(_getdynamicparam.PARAMETER_PATTERN);
+        if (markerMatch && paramMatches && paramMatches[2]) {
+          const { key, optional, repeat } = (0, _getdynamicparam.parseMatchedParameter)(paramMatches[2]);
+          groups[key] = {
+            pos: groupIndex++,
+            repeat,
+            optional
+          };
+          segments.push("/" + (0, _escaperegexp.escapeStringRegexp)(markerMatch) + "([^/]+?)");
+        } else if (paramMatches && paramMatches[2]) {
+          const { key, repeat, optional } = (0, _getdynamicparam.parseMatchedParameter)(paramMatches[2]);
+          groups[key] = {
+            pos: groupIndex++,
+            repeat,
+            optional
+          };
+          if (includePrefix && paramMatches[1]) {
+            segments.push("/" + (0, _escaperegexp.escapeStringRegexp)(paramMatches[1]));
           }
-        }).join(""),
+          let s = repeat ? optional ? "(?:/(.+?))?" : "/(.+?)" : "/([^/]+?)";
+          if (includePrefix && paramMatches[1]) {
+            s = s.substring(1);
+          }
+          segments.push(s);
+        } else {
+          segments.push("/" + (0, _escaperegexp.escapeStringRegexp)(segment));
+        }
+        if (includeSuffix && paramMatches && paramMatches[3]) {
+          segments.push((0, _escaperegexp.escapeStringRegexp)(paramMatches[3]));
+        }
+      }
+      return {
+        parameterizedRoute: segments.join(""),
         groups
       };
     }
-    function getRouteRegex(normalizedRoute) {
-      const { parameterizedRoute, groups } = getParametrizedRoute(normalizedRoute);
+    function getRouteRegex(normalizedRoute, param) {
+      let { includeSuffix = false, includePrefix = false, excludeOptionalTrailingSlash = false } = param === void 0 ? {} : param;
+      const { parameterizedRoute, groups } = getParametrizedRoute(normalizedRoute, includeSuffix, includePrefix);
+      let re = parameterizedRoute;
+      if (!excludeOptionalTrailingSlash) {
+        re += "(?:/)?";
+      }
       return {
-        re: new RegExp("^" + parameterizedRoute + "(?:/)?$"),
+        re: new RegExp("^" + re + "$"),
         groups
       };
     }
@@ -1451,8 +2279,8 @@ var require_route_regex = __commonJS({
       };
     }
     function getSafeKeyFromSegment(param) {
-      let { interceptionMarker, getSafeRouteKey, segment, routeKeys, keyPrefix } = param;
-      const { key, optional, repeat } = parseParameter(segment);
+      let { interceptionMarker, getSafeRouteKey, segment, routeKeys, keyPrefix, backreferenceDuplicateKeys } = param;
+      const { key, optional, repeat } = (0, _getdynamicparam.parseMatchedParameter)(segment);
       let cleanedKey = key.replace(/\W/g, "");
       if (keyPrefix) {
         cleanedKey = "" + keyPrefix + cleanedKey;
@@ -1467,55 +2295,80 @@ var require_route_regex = __commonJS({
       if (invalidKey) {
         cleanedKey = getSafeRouteKey();
       }
+      const duplicateKey = cleanedKey in routeKeys;
       if (keyPrefix) {
         routeKeys[cleanedKey] = "" + keyPrefix + key;
       } else {
         routeKeys[cleanedKey] = key;
       }
       const interceptionPrefix = interceptionMarker ? (0, _escaperegexp.escapeStringRegexp)(interceptionMarker) : "";
-      return repeat ? optional ? "(?:/" + interceptionPrefix + "(?<" + cleanedKey + ">.+?))?" : "/" + interceptionPrefix + "(?<" + cleanedKey + ">.+?)" : "/" + interceptionPrefix + "(?<" + cleanedKey + ">[^/]+?)";
+      let pattern;
+      if (duplicateKey && backreferenceDuplicateKeys) {
+        pattern = "\\k<" + cleanedKey + ">";
+      } else if (repeat) {
+        pattern = "(?<" + cleanedKey + ">.+?)";
+      } else {
+        pattern = "(?<" + cleanedKey + ">[^/]+?)";
+      }
+      return optional ? "(?:/" + interceptionPrefix + pattern + ")?" : "/" + interceptionPrefix + pattern;
     }
-    function getNamedParametrizedRoute(route, prefixRouteKeys) {
-      const segments = (0, _removetrailingslash.removeTrailingSlash)(route).slice(1).split("/");
+    function getNamedParametrizedRoute(route, prefixRouteKeys, includeSuffix, includePrefix, backreferenceDuplicateKeys) {
       const getSafeRouteKey = buildGetSafeRouteKey();
       const routeKeys = {};
-      return {
-        namedParameterizedRoute: segments.map((segment) => {
-          const hasInterceptionMarker = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.some((m) => segment.startsWith(m));
-          const paramMatches = segment.match(/\[((?:\[.*\])|.+)\]/);
-          if (hasInterceptionMarker && paramMatches) {
-            const [usedMarker] = segment.split(paramMatches[0]);
-            return getSafeKeyFromSegment({
-              getSafeRouteKey,
-              interceptionMarker: usedMarker,
-              segment: paramMatches[1],
-              routeKeys,
-              keyPrefix: prefixRouteKeys ? _constants.NEXT_INTERCEPTION_MARKER_PREFIX : void 0
-            });
-          } else if (paramMatches) {
-            return getSafeKeyFromSegment({
-              getSafeRouteKey,
-              segment: paramMatches[1],
-              routeKeys,
-              keyPrefix: prefixRouteKeys ? _constants.NEXT_QUERY_PARAM_PREFIX : void 0
-            });
-          } else {
-            return "/" + (0, _escaperegexp.escapeStringRegexp)(segment);
+      const segments = [];
+      for (const segment of (0, _removetrailingslash.removeTrailingSlash)(route).slice(1).split("/")) {
+        const hasInterceptionMarker = _interceptionroutes.INTERCEPTION_ROUTE_MARKERS.some((m) => segment.startsWith(m));
+        const paramMatches = segment.match(_getdynamicparam.PARAMETER_PATTERN);
+        if (hasInterceptionMarker && paramMatches && paramMatches[2]) {
+          segments.push(getSafeKeyFromSegment({
+            getSafeRouteKey,
+            interceptionMarker: paramMatches[1],
+            segment: paramMatches[2],
+            routeKeys,
+            keyPrefix: prefixRouteKeys ? _constants.NEXT_INTERCEPTION_MARKER_PREFIX : void 0,
+            backreferenceDuplicateKeys
+          }));
+        } else if (paramMatches && paramMatches[2]) {
+          if (includePrefix && paramMatches[1]) {
+            segments.push("/" + (0, _escaperegexp.escapeStringRegexp)(paramMatches[1]));
           }
-        }).join(""),
+          let s = getSafeKeyFromSegment({
+            getSafeRouteKey,
+            segment: paramMatches[2],
+            routeKeys,
+            keyPrefix: prefixRouteKeys ? _constants.NEXT_QUERY_PARAM_PREFIX : void 0,
+            backreferenceDuplicateKeys
+          });
+          if (includePrefix && paramMatches[1]) {
+            s = s.substring(1);
+          }
+          segments.push(s);
+        } else {
+          segments.push("/" + (0, _escaperegexp.escapeStringRegexp)(segment));
+        }
+        if (includeSuffix && paramMatches && paramMatches[3]) {
+          segments.push((0, _escaperegexp.escapeStringRegexp)(paramMatches[3]));
+        }
+      }
+      return {
+        namedParameterizedRoute: segments.join(""),
         routeKeys
       };
     }
-    function getNamedRouteRegex(normalizedRoute, prefixRouteKey) {
-      const result = getNamedParametrizedRoute(normalizedRoute, prefixRouteKey);
-      return {
-        ...getRouteRegex(normalizedRoute),
-        namedRegex: "^" + result.namedParameterizedRoute + "(?:/)?$",
+    function getNamedRouteRegex(normalizedRoute, options) {
+      var _options_includeSuffix, _options_includePrefix, _options_backreferenceDuplicateKeys;
+      const result = getNamedParametrizedRoute(normalizedRoute, options.prefixRouteKeys, (_options_includeSuffix = options.includeSuffix) != null ? _options_includeSuffix : false, (_options_includePrefix = options.includePrefix) != null ? _options_includePrefix : false, (_options_backreferenceDuplicateKeys = options.backreferenceDuplicateKeys) != null ? _options_backreferenceDuplicateKeys : false);
+      let namedRegex = result.namedParameterizedRoute;
+      if (!options.excludeOptionalTrailingSlash) {
+        namedRegex += "(?:/)?";
+      }
+      return __spreadProps(__spreadValues({}, getRouteRegex(normalizedRoute, options)), {
+        namedRegex: "^" + namedRegex + "$",
         routeKeys: result.routeKeys
-      };
+      });
     }
     function getNamedMiddlewareRegex(normalizedRoute, options) {
-      const { parameterizedRoute } = getParametrizedRoute(normalizedRoute);
+      const { parameterizedRoute } = getParametrizedRoute(normalizedRoute, false, false);
       const { catchAll = true } = options;
       if (parameterizedRoute === "/") {
         let catchAllRegex = catchAll ? ".*" : "";
@@ -1523,7 +2376,7 @@ var require_route_regex = __commonJS({
           namedRegex: "^/" + catchAllRegex + "$"
         };
       }
-      const { namedParameterizedRoute } = getNamedParametrizedRoute(normalizedRoute, false);
+      const { namedParameterizedRoute } = getNamedParametrizedRoute(normalizedRoute, false, false, false, false);
       let catchAllGroupedRegex = catchAll ? "(?:(/.*)?)" : "";
       return {
         namedRegex: "^" + namedParameterizedRoute + catchAllGroupedRegex + "$"
@@ -1609,10 +2462,12 @@ var require_resolve_href = __commonJS({
     var _islocalurl = require_is_local_url();
     var _utils1 = require_utils2();
     var _interpolateas = require_interpolate_as();
+    var _routeregex = require_route_regex();
+    var _routematcher = require_route_matcher();
     function resolveHref(router, href, resolveAs) {
       let base;
       let urlAsString = typeof href === "string" ? href : (0, _formaturl.formatWithValidation)(href);
-      const urlProtoMatch = urlAsString.match(/^[a-zA-Z]{1,}:\/\//);
+      const urlProtoMatch = urlAsString.match(/^[a-z][a-z0-9+.-]*:\/\//i);
       const urlAsStringNoProto = urlProtoMatch ? urlAsString.slice(urlProtoMatch[0].length) : urlAsString;
       const urlParts = urlAsStringNoProto.split("?", 1);
       if ((urlParts[0] || "").match(/(\/\/|\\)/)) {
@@ -1626,7 +2481,19 @@ var require_resolve_href = __commonJS({
         ] : urlAsString;
       }
       try {
-        base = new URL(urlAsString.startsWith("#") ? router.asPath : router.pathname, "http://n");
+        let baseBase = urlAsString.startsWith("#") ? router.asPath : router.pathname;
+        if (urlAsString.startsWith("?")) {
+          baseBase = router.asPath;
+          if ((0, _utils1.isDynamicRoute)(router.pathname)) {
+            baseBase = router.pathname;
+            const routeRegex = (0, _routeregex.getRouteRegex)(router.pathname);
+            const match = (0, _routematcher.getRouteMatcher)(routeRegex)(router.asPath);
+            if (!match) {
+              baseBase = router.asPath;
+            }
+          }
+        }
+        base = new URL(baseBase, "http://n");
       } catch (_) {
         base = new URL("/", "http://n");
       }
@@ -1746,6 +2613,17 @@ var require_add_locale2 = __commonJS({
   }
 });
 
+// ../../node_modules/@swc/helpers/cjs/_interop_require_default.cjs
+var require_interop_require_default = __commonJS({
+  "../../node_modules/@swc/helpers/cjs/_interop_require_default.cjs"(exports) {
+    "use strict";
+    function _interop_require_default(obj) {
+      return obj && obj.__esModule ? obj : { default: obj };
+    }
+    exports._ = _interop_require_default;
+  }
+});
+
 // ../../node_modules/next/dist/shared/lib/router-context.shared-runtime.js
 var require_router_context_shared_runtime = __commonJS({
   "../../node_modules/next/dist/shared/lib/router-context.shared-runtime.js"(exports) {
@@ -1765,53 +2643,6 @@ var require_router_context_shared_runtime = __commonJS({
     if (process.env.NODE_ENV !== "production") {
       RouterContext.displayName = "RouterContext";
     }
-  }
-});
-
-// ../../node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js
-var require_app_router_context_shared_runtime = __commonJS({
-  "../../node_modules/next/dist/shared/lib/app-router-context.shared-runtime.js"(exports) {
-    "use client";
-    "use strict";
-    Object.defineProperty(exports, "__esModule", {
-      value: true
-    });
-    function _export(target, all) {
-      for (var name in all) Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-      });
-    }
-    _export(exports, {
-      AppRouterContext: function() {
-        return AppRouterContext;
-      },
-      GlobalLayoutRouterContext: function() {
-        return GlobalLayoutRouterContext;
-      },
-      LayoutRouterContext: function() {
-        return LayoutRouterContext;
-      },
-      MissingSlotContext: function() {
-        return MissingSlotContext;
-      },
-      TemplateContext: function() {
-        return TemplateContext;
-      }
-    });
-    var _interop_require_default = require_interop_require_default();
-    var _react = /* @__PURE__ */ _interop_require_default._(__require("react"));
-    var AppRouterContext = _react.default.createContext(null);
-    var LayoutRouterContext = _react.default.createContext(null);
-    var GlobalLayoutRouterContext = _react.default.createContext(null);
-    var TemplateContext = _react.default.createContext(null);
-    if (process.env.NODE_ENV !== "production") {
-      AppRouterContext.displayName = "AppRouterContext";
-      LayoutRouterContext.displayName = "LayoutRouterContext";
-      GlobalLayoutRouterContext.displayName = "GlobalLayoutRouterContext";
-      TemplateContext.displayName = "TemplateContext";
-    }
-    var MissingSlotContext = _react.default.createContext(/* @__PURE__ */ new Set());
   }
 });
 
@@ -1987,18 +2818,28 @@ var require_normalize_locale_path = __commonJS({
         return normalizeLocalePath;
       }
     });
+    var cache = /* @__PURE__ */ new WeakMap();
     function normalizeLocalePath(pathname, locales) {
+      if (!locales) return {
+        pathname
+      };
+      let lowercasedLocales = cache.get(locales);
+      if (!lowercasedLocales) {
+        lowercasedLocales = locales.map((locale) => locale.toLowerCase());
+        cache.set(locales, lowercasedLocales);
+      }
       let detectedLocale;
-      const pathnameParts = pathname.split("/");
-      (locales || []).some((locale) => {
-        if (pathnameParts[1] && pathnameParts[1].toLowerCase() === locale.toLowerCase()) {
-          detectedLocale = locale;
-          pathnameParts.splice(1, 1);
-          pathname = pathnameParts.join("/") || "/";
-          return true;
-        }
-        return false;
-      });
+      const segments = pathname.split("/", 2);
+      if (!segments[1]) return {
+        pathname
+      };
+      const segment = segments[1].toLowerCase();
+      const index = lowercasedLocales.indexOf(segment);
+      if (index < 0) return {
+        pathname
+      };
+      detectedLocale = locales[index];
+      pathname = pathname.slice(detectedLocale.length + 1) || "/";
       return {
         pathname,
         detectedLocale
@@ -2161,78 +3002,94 @@ var require_add_base_path = __commonJS({
   }
 });
 
-// ../../node_modules/next/dist/client/components/router-reducer/router-reducer-types.js
-var require_router_reducer_types = __commonJS({
-  "../../node_modules/next/dist/client/components/router-reducer/router-reducer-types.js"(exports, module) {
+// ../../node_modules/next/dist/client/use-merged-ref.js
+var require_use_merged_ref = __commonJS({
+  "../../node_modules/next/dist/client/use-merged-ref.js"(exports, module) {
     "use strict";
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
-    function _export(target, all) {
-      for (var name in all) Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-      });
-    }
-    _export(exports, {
-      ACTION_FAST_REFRESH: function() {
-        return ACTION_FAST_REFRESH;
-      },
-      ACTION_NAVIGATE: function() {
-        return ACTION_NAVIGATE;
-      },
-      ACTION_PREFETCH: function() {
-        return ACTION_PREFETCH;
-      },
-      ACTION_REFRESH: function() {
-        return ACTION_REFRESH;
-      },
-      ACTION_RESTORE: function() {
-        return ACTION_RESTORE;
-      },
-      ACTION_SERVER_ACTION: function() {
-        return ACTION_SERVER_ACTION;
-      },
-      ACTION_SERVER_PATCH: function() {
-        return ACTION_SERVER_PATCH;
-      },
-      PrefetchCacheEntryStatus: function() {
-        return PrefetchCacheEntryStatus;
-      },
-      PrefetchKind: function() {
-        return PrefetchKind;
-      },
-      isThenable: function() {
-        return isThenable;
+    Object.defineProperty(exports, "useMergedRef", {
+      enumerable: true,
+      get: function() {
+        return useMergedRef;
       }
     });
-    var ACTION_REFRESH = "refresh";
-    var ACTION_NAVIGATE = "navigate";
-    var ACTION_RESTORE = "restore";
-    var ACTION_SERVER_PATCH = "server-patch";
-    var ACTION_PREFETCH = "prefetch";
-    var ACTION_FAST_REFRESH = "fast-refresh";
-    var ACTION_SERVER_ACTION = "server-action";
-    var PrefetchKind;
-    (function(PrefetchKind2) {
-      PrefetchKind2["AUTO"] = "auto";
-      PrefetchKind2["FULL"] = "full";
-      PrefetchKind2["TEMPORARY"] = "temporary";
-    })(PrefetchKind || (PrefetchKind = {}));
-    var PrefetchCacheEntryStatus;
-    (function(PrefetchCacheEntryStatus2) {
-      PrefetchCacheEntryStatus2["fresh"] = "fresh";
-      PrefetchCacheEntryStatus2["reusable"] = "reusable";
-      PrefetchCacheEntryStatus2["expired"] = "expired";
-      PrefetchCacheEntryStatus2["stale"] = "stale";
-    })(PrefetchCacheEntryStatus || (PrefetchCacheEntryStatus = {}));
-    function isThenable(value) {
-      return value && (typeof value === "object" || typeof value === "function") && typeof value.then === "function";
+    var _react = __require("react");
+    function useMergedRef(refA, refB) {
+      const cleanupA = (0, _react.useRef)(null);
+      const cleanupB = (0, _react.useRef)(null);
+      return (0, _react.useCallback)((current) => {
+        if (current === null) {
+          const cleanupFnA = cleanupA.current;
+          if (cleanupFnA) {
+            cleanupA.current = null;
+            cleanupFnA();
+          }
+          const cleanupFnB = cleanupB.current;
+          if (cleanupFnB) {
+            cleanupB.current = null;
+            cleanupFnB();
+          }
+        } else {
+          if (refA) {
+            cleanupA.current = applyRef(refA, current);
+          }
+          if (refB) {
+            cleanupB.current = applyRef(refB, current);
+          }
+        }
+      }, [
+        refA,
+        refB
+      ]);
+    }
+    function applyRef(refA, current) {
+      if (typeof refA === "function") {
+        const cleanup = refA(current);
+        if (typeof cleanup === "function") {
+          return cleanup;
+        } else {
+          return () => refA(null);
+        }
+      } else {
+        refA.current = current;
+        return () => {
+          refA.current = null;
+        };
+      }
     }
     if ((typeof exports.default === "function" || typeof exports.default === "object" && exports.default !== null) && typeof exports.default.__esModule === "undefined") {
       Object.defineProperty(exports.default, "__esModule", { value: true });
       Object.assign(exports.default, exports);
       module.exports = exports.default;
+    }
+  }
+});
+
+// ../../node_modules/next/dist/shared/lib/utils/error-once.js
+var require_error_once = __commonJS({
+  "../../node_modules/next/dist/shared/lib/utils/error-once.js"(exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+    Object.defineProperty(exports, "errorOnce", {
+      enumerable: true,
+      get: function() {
+        return errorOnce;
+      }
+    });
+    var errorOnce = (_) => {
+    };
+    if (process.env.NODE_ENV !== "production") {
+      const errors = /* @__PURE__ */ new Set();
+      errorOnce = (msg) => {
+        if (!errors.has(msg)) {
+          console.error(msg);
+        }
+        errors.add(msg);
+      };
     }
   }
 });
@@ -2245,32 +3102,40 @@ var require_link = __commonJS({
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
-    Object.defineProperty(exports, "default", {
-      enumerable: true,
-      get: function() {
+    function _export(target, all) {
+      for (var name in all) Object.defineProperty(target, name, {
+        enumerable: true,
+        get: all[name]
+      });
+    }
+    _export(exports, {
+      default: function() {
         return _default;
+      },
+      useLinkStatus: function() {
+        return useLinkStatus;
       }
     });
-    var _interop_require_default = require_interop_require_default();
+    var _interop_require_wildcard = require_interop_require_wildcard();
     var _jsxruntime = __require("react/jsx-runtime");
-    var _react = /* @__PURE__ */ _interop_require_default._(__require("react"));
+    var _react = /* @__PURE__ */ _interop_require_wildcard._(__require("react"));
     var _resolvehref = require_resolve_href();
     var _islocalurl = require_is_local_url();
     var _formaturl = require_format_url();
     var _utils = require_utils();
     var _addlocale = require_add_locale2();
     var _routercontextsharedruntime = require_router_context_shared_runtime();
-    var _approutercontextsharedruntime = require_app_router_context_shared_runtime();
     var _useintersection = require_use_intersection();
     var _getdomainlocale = require_get_domain_locale();
     var _addbasepath = require_add_base_path();
-    var _routerreducertypes = require_router_reducer_types();
+    var _usemergedref = require_use_merged_ref();
+    var _erroronce = require_error_once();
     var prefetched = /* @__PURE__ */ new Set();
-    function prefetch(router, href, as, options, appOptions, isAppRouter) {
+    function prefetch(router, href, as, options) {
       if (typeof window === "undefined") {
         return;
       }
-      if (!isAppRouter && !(0, _islocalurl.isLocalURL)(href)) {
+      if (!(0, _islocalurl.isLocalURL)(href)) {
         return;
       }
       if (!options.bypassPrefetchedCheck) {
@@ -2284,14 +3149,7 @@ var require_link = __commonJS({
         }
         prefetched.add(prefetchedKey);
       }
-      const doPrefetch = async () => {
-        if (isAppRouter) {
-          return router.prefetch(href, appOptions);
-        } else {
-          return router.prefetch(href, as, options);
-        }
-      };
-      doPrefetch().catch((err) => {
+      router.prefetch(href, as, options).catch((err) => {
         if (process.env.NODE_ENV !== "production") {
           throw err;
         }
@@ -2303,15 +3161,32 @@ var require_link = __commonJS({
       return target && target !== "_self" || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || // triggers resource download
       event.nativeEvent && event.nativeEvent.which === 2;
     }
-    function linkClicked(e, router, href, as, replace, shallow, scroll, locale, isAppRouter) {
+    function linkClicked(e, router, href, as, replace, shallow, scroll, locale, onNavigate) {
       const { nodeName } = e.currentTarget;
       const isAnchorNodeName = nodeName.toUpperCase() === "A";
-      if (isAnchorNodeName && (isModifiedEvent(e) || // app-router supports external urls out of the box so it shouldn't short-circuit here as support for e.g. `replace` is added in the app-router.
-      !isAppRouter && !(0, _islocalurl.isLocalURL)(href))) {
+      if (isAnchorNodeName && isModifiedEvent(e) || e.currentTarget.hasAttribute("download")) {
+        return;
+      }
+      if (!(0, _islocalurl.isLocalURL)(href)) {
+        if (replace) {
+          e.preventDefault();
+          location.replace(href);
+        }
         return;
       }
       e.preventDefault();
       const navigate = () => {
+        if (onNavigate) {
+          let isDefaultPrevented = false;
+          onNavigate({
+            preventDefault: () => {
+              isDefaultPrevented = true;
+            }
+          });
+          if (isDefaultPrevented) {
+            return;
+          }
+        }
         const routerScroll = scroll != null ? scroll : true;
         if ("beforePopState" in router) {
           router[replace ? "replace" : "push"](href, as, {
@@ -2325,11 +3200,7 @@ var require_link = __commonJS({
           });
         }
       };
-      if (isAppRouter) {
-        _react.default.startTransition(navigate);
-      } else {
-        navigate();
-      }
+      navigate();
     }
     function formatStringOrUrl(urlObjOrString) {
       if (typeof urlObjOrString === "string") {
@@ -2339,22 +3210,22 @@ var require_link = __commonJS({
     }
     var Link4 = /* @__PURE__ */ _react.default.forwardRef(function LinkComponent(props, forwardedRef) {
       let children;
-      const { href: hrefProp, as: asProp, children: childrenProp, prefetch: prefetchProp = null, passHref, replace, shallow, scroll, locale, onClick, onMouseEnter: onMouseEnterProp, onTouchStart: onTouchStartProp, legacyBehavior = false, ...restProps } = props;
+      const _a = props, { href: hrefProp, as: asProp, children: childrenProp, prefetch: prefetchProp = null, passHref, replace, shallow, scroll, locale, onClick, onNavigate, onMouseEnter: onMouseEnterProp, onTouchStart: onTouchStartProp, legacyBehavior = false } = _a, restProps = __objRest(_a, ["href", "as", "children", "prefetch", "passHref", "replace", "shallow", "scroll", "locale", "onClick", "onNavigate", "onMouseEnter", "onTouchStart", "legacyBehavior"]);
       children = childrenProp;
       if (legacyBehavior && (typeof children === "string" || typeof children === "number")) {
         children = /* @__PURE__ */ (0, _jsxruntime.jsx)("a", {
           children
         });
       }
-      const pagesRouter = _react.default.useContext(_routercontextsharedruntime.RouterContext);
-      const appRouter = _react.default.useContext(_approutercontextsharedruntime.AppRouterContext);
-      const router = pagesRouter != null ? pagesRouter : appRouter;
-      const isAppRouter = !pagesRouter;
+      const router = _react.default.useContext(_routercontextsharedruntime.RouterContext);
       const prefetchEnabled = prefetchProp !== false;
-      const appPrefetchKind = prefetchProp === null ? _routerreducertypes.PrefetchKind.AUTO : _routerreducertypes.PrefetchKind.FULL;
       if (process.env.NODE_ENV !== "production") {
         let createPropError = function(args) {
-          return new Error("Failed prop type: The prop `" + args.key + "` expects a " + args.expected + " in `<Link>`, but got `" + args.actual + "` instead." + (typeof window !== "undefined" ? "\nOpen your browser's console to view the Component stack trace." : ""));
+          return Object.defineProperty(new Error("Failed prop type: The prop `" + args.key + "` expects a " + args.expected + " in `<Link>`, but got `" + args.actual + "` instead." + (typeof window !== "undefined" ? "\nOpen your browser's console to view the Component stack trace." : "")), "__NEXT_ERROR_CODE", {
+            value: "E319",
+            enumerable: false,
+            configurable: true
+          });
         };
         const requiredPropsGuard = {
           href: true
@@ -2384,7 +3255,8 @@ var require_link = __commonJS({
           onClick: true,
           onMouseEnter: true,
           onTouchStart: true,
-          legacyBehavior: true
+          legacyBehavior: true,
+          onNavigate: true
         };
         const optionalProps = Object.keys(optionalPropsGuard);
         optionalProps.forEach((key) => {
@@ -2405,7 +3277,7 @@ var require_link = __commonJS({
                 actual: valType
               });
             }
-          } else if (key === "onClick" || key === "onMouseEnter" || key === "onTouchStart") {
+          } else if (key === "onClick" || key === "onMouseEnter" || key === "onTouchStart" || key === "onNavigate") {
             if (props[key] && valType !== "function") {
               throw createPropError({
                 key,
@@ -2413,7 +3285,7 @@ var require_link = __commonJS({
                 actual: valType
               });
             }
-          } else if (key === "replace" || key === "scroll" || key === "shallow" || key === "passHref" || key === "prefetch" || key === "legacyBehavior") {
+          } else if (key === "replace" || key === "scroll" || key === "shallow" || key === "passHref" || key === "legacyBehavior") {
             if (props[key] != null && valType !== "boolean") {
               throw createPropError({
                 key,
@@ -2421,47 +3293,34 @@ var require_link = __commonJS({
                 actual: valType
               });
             }
+          } else if (key === "prefetch") {
+            if (props[key] != null && valType !== "boolean" && props[key] !== "auto") {
+              throw createPropError({
+                key,
+                expected: '`boolean | "auto"`',
+                actual: valType
+              });
+            }
           } else {
             const _ = key;
           }
         });
-        const hasWarned = _react.default.useRef(false);
-        if (props.prefetch && !hasWarned.current && !isAppRouter) {
-          hasWarned.current = true;
-          console.warn("Next.js auto-prefetches automatically based on viewport. The prefetch attribute is no longer needed. More: https://nextjs.org/docs/messages/prefetch-true-deprecated");
-        }
-      }
-      if (process.env.NODE_ENV !== "production") {
-        if (isAppRouter && !asProp) {
-          let href2;
-          if (typeof hrefProp === "string") {
-            href2 = hrefProp;
-          } else if (typeof hrefProp === "object" && typeof hrefProp.pathname === "string") {
-            href2 = hrefProp.pathname;
-          }
-          if (href2) {
-            const hasDynamicSegment = href2.split("/").some((segment) => segment.startsWith("[") && segment.endsWith("]"));
-            if (hasDynamicSegment) {
-              throw new Error("Dynamic href `" + href2 + "` found in <Link> while using the `/app` router, this is not supported. Read more: https://nextjs.org/docs/messages/app-dir-dynamic-href");
-            }
-          }
-        }
       }
       const { href, as } = _react.default.useMemo(() => {
-        if (!pagesRouter) {
+        if (!router) {
           const resolvedHref2 = formatStringOrUrl(hrefProp);
           return {
             href: resolvedHref2,
             as: asProp ? formatStringOrUrl(asProp) : resolvedHref2
           };
         }
-        const [resolvedHref, resolvedAs] = (0, _resolvehref.resolveHref)(pagesRouter, hrefProp, true);
+        const [resolvedHref, resolvedAs] = (0, _resolvehref.resolveHref)(router, hrefProp, true);
         return {
           href: resolvedHref,
-          as: asProp ? (0, _resolvehref.resolveHref)(pagesRouter, asProp) : resolvedAs || resolvedHref
+          as: asProp ? (0, _resolvehref.resolveHref)(router, asProp) : resolvedAs || resolvedHref
         };
       }, [
-        pagesRouter,
+        router,
         hrefProp,
         asProp
       ]);
@@ -2480,9 +3339,17 @@ var require_link = __commonJS({
             child = _react.default.Children.only(children);
           } catch (err) {
             if (!children) {
-              throw new Error("No children were passed to <Link> with `href` of `" + hrefProp + "` but one child is required https://nextjs.org/docs/messages/link-no-children");
+              throw Object.defineProperty(new Error("No children were passed to <Link> with `href` of `" + hrefProp + "` but one child is required https://nextjs.org/docs/messages/link-no-children"), "__NEXT_ERROR_CODE", {
+                value: "E320",
+                enumerable: false,
+                configurable: true
+              });
             }
-            throw new Error("Multiple children were passed to <Link> with `href` of `" + hrefProp + "` but only one child is supported https://nextjs.org/docs/messages/link-multiple-children" + (typeof window !== "undefined" ? " \nOpen your browser's console to view the Component stack trace." : ""));
+            throw Object.defineProperty(new Error("Multiple children were passed to <Link> with `href` of `" + hrefProp + "` but only one child is supported https://nextjs.org/docs/messages/link-multiple-children" + (typeof window !== "undefined" ? " \nOpen your browser's console to view the Component stack trace." : "")), "__NEXT_ERROR_CODE", {
+              value: "E266",
+              enumerable: false,
+              configurable: true
+            });
           }
         } else {
           child = _react.default.Children.only(children);
@@ -2490,7 +3357,11 @@ var require_link = __commonJS({
       } else {
         if (process.env.NODE_ENV === "development") {
           if ((children == null ? void 0 : children.type) === "a") {
-            throw new Error("Invalid <Link> with <a> child. Please remove <a> or use <Link legacyBehavior>.\nLearn more: https://nextjs.org/docs/messages/invalid-new-link-with-extra-anchor");
+            throw Object.defineProperty(new Error("Invalid <Link> with <a> child. Please remove <a> or use <Link legacyBehavior>.\nLearn more: https://nextjs.org/docs/messages/invalid-new-link-with-extra-anchor"), "__NEXT_ERROR_CODE", {
+              value: "E209",
+              enumerable: false,
+              configurable: true
+            });
           }
         }
       }
@@ -2498,26 +3369,20 @@ var require_link = __commonJS({
       const [setIntersectionRef, isVisible, resetVisible] = (0, _useintersection.useIntersection)({
         rootMargin: "200px"
       });
-      const setRef = _react.default.useCallback((el) => {
+      const setIntersectionWithResetRef = _react.default.useCallback((el) => {
         if (previousAs.current !== as || previousHref.current !== href) {
           resetVisible();
           previousAs.current = as;
           previousHref.current = href;
         }
         setIntersectionRef(el);
-        if (childRef) {
-          if (typeof childRef === "function") childRef(el);
-          else if (typeof childRef === "object") {
-            childRef.current = el;
-          }
-        }
       }, [
         as,
-        childRef,
         href,
         resetVisible,
         setIntersectionRef
       ]);
+      const setRef = (0, _usemergedref.useMergedRef)(setIntersectionWithResetRef, childRef);
       _react.default.useEffect(() => {
         if (process.env.NODE_ENV !== "production") {
           return;
@@ -2530,26 +3395,26 @@ var require_link = __commonJS({
         }
         prefetch(router, href, as, {
           locale
-        }, {
-          kind: appPrefetchKind
-        }, isAppRouter);
+        });
       }, [
         as,
         href,
         isVisible,
         locale,
         prefetchEnabled,
-        pagesRouter == null ? void 0 : pagesRouter.locale,
-        router,
-        isAppRouter,
-        appPrefetchKind
+        router == null ? void 0 : router.locale,
+        router
       ]);
       const childProps = {
         ref: setRef,
         onClick(e) {
           if (process.env.NODE_ENV !== "production") {
             if (!e) {
-              throw new Error('Component rendered inside next/link has to pass click event to "onClick" prop.');
+              throw Object.defineProperty(new Error('Component rendered inside next/link has to pass click event to "onClick" prop.'), "__NEXT_ERROR_CODE", {
+                value: "E312",
+                enumerable: false,
+                configurable: true
+              });
             }
           }
           if (!legacyBehavior && typeof onClick === "function") {
@@ -2564,7 +3429,7 @@ var require_link = __commonJS({
           if (e.defaultPrevented) {
             return;
           }
-          linkClicked(e, router, href, as, replace, shallow, scroll, locale, isAppRouter);
+          linkClicked(e, router, href, as, replace, shallow, scroll, locale, onNavigate);
         },
         onMouseEnter(e) {
           if (!legacyBehavior && typeof onMouseEnterProp === "function") {
@@ -2576,17 +3441,12 @@ var require_link = __commonJS({
           if (!router) {
             return;
           }
-          if ((!prefetchEnabled || process.env.NODE_ENV === "development") && isAppRouter) {
-            return;
-          }
           prefetch(router, href, as, {
             locale,
             priority: true,
             // @see {https://github.com/vercel/next.js/discussions/40268?sort=top#discussioncomment-3572642}
             bypassPrefetchedCheck: true
-          }, {
-            kind: appPrefetchKind
-          }, isAppRouter);
+          });
         },
         onTouchStart: process.env.__NEXT_LINK_NO_TOUCH_START ? void 0 : function onTouchStart(e) {
           if (!legacyBehavior && typeof onTouchStartProp === "function") {
@@ -2598,32 +3458,38 @@ var require_link = __commonJS({
           if (!router) {
             return;
           }
-          if (!prefetchEnabled && isAppRouter) {
-            return;
-          }
           prefetch(router, href, as, {
             locale,
             priority: true,
             // @see {https://github.com/vercel/next.js/discussions/40268?sort=top#discussioncomment-3572642}
             bypassPrefetchedCheck: true
-          }, {
-            kind: appPrefetchKind
-          }, isAppRouter);
+          });
         }
       };
       if ((0, _utils.isAbsoluteUrl)(as)) {
         childProps.href = as;
       } else if (!legacyBehavior || passHref || child.type === "a" && !("href" in child.props)) {
-        const curLocale = typeof locale !== "undefined" ? locale : pagesRouter == null ? void 0 : pagesRouter.locale;
-        const localeDomain = (pagesRouter == null ? void 0 : pagesRouter.isLocaleDomain) && (0, _getdomainlocale.getDomainLocale)(as, curLocale, pagesRouter == null ? void 0 : pagesRouter.locales, pagesRouter == null ? void 0 : pagesRouter.domainLocales);
-        childProps.href = localeDomain || (0, _addbasepath.addBasePath)((0, _addlocale.addLocale)(as, curLocale, pagesRouter == null ? void 0 : pagesRouter.defaultLocale));
+        const curLocale = typeof locale !== "undefined" ? locale : router == null ? void 0 : router.locale;
+        const localeDomain = (router == null ? void 0 : router.isLocaleDomain) && (0, _getdomainlocale.getDomainLocale)(as, curLocale, router == null ? void 0 : router.locales, router == null ? void 0 : router.domainLocales);
+        childProps.href = localeDomain || (0, _addbasepath.addBasePath)((0, _addlocale.addLocale)(as, curLocale, router == null ? void 0 : router.defaultLocale));
       }
-      return legacyBehavior ? /* @__PURE__ */ _react.default.cloneElement(child, childProps) : /* @__PURE__ */ (0, _jsxruntime.jsx)("a", {
-        ...restProps,
-        ...childProps,
+      if (legacyBehavior) {
+        if (process.env.NODE_ENV === "development") {
+          (0, _erroronce.errorOnce)("`legacyBehavior` is deprecated and will be removed in a future release. A codemod is available to upgrade your components:\n\nnpx @next/codemod@latest new-link .\n\nLearn more: https://nextjs.org/docs/app/building-your-application/upgrading/codemods#remove-a-tags-from-link-components");
+        }
+        return /* @__PURE__ */ _react.default.cloneElement(child, childProps);
+      }
+      return /* @__PURE__ */ (0, _jsxruntime.jsx)("a", __spreadProps(__spreadValues(__spreadValues({}, restProps), childProps), {
         children
-      });
+      }));
     });
+    var LinkStatusContext = /* @__PURE__ */ (0, _react.createContext)({
+      // We do not support link status in the Pages Router, so we always return false
+      pending: false
+    });
+    var useLinkStatus = () => {
+      return (0, _react.useContext)(LinkStatusContext);
+    };
     var _default = Link4;
     if ((typeof exports.default === "function" || typeof exports.default === "object" && exports.default !== null) && typeof exports.default.__esModule === "undefined") {
       Object.defineProperty(exports.default, "__esModule", { value: true });
@@ -2752,7 +3618,7 @@ var require_image_config = __commonJS({
       ],
       dangerouslyAllowSVG: false,
       contentSecurityPolicy: "script-src 'none'; frame-src 'none'; sandbox;",
-      contentDispositionType: "inline",
+      contentDispositionType: "attachment",
       localPatterns: void 0,
       remotePatterns: [],
       qualities: void 0,
@@ -2782,6 +3648,13 @@ var require_get_img_props = __commonJS({
       "eager",
       void 0
     ];
+    var INVALID_BACKGROUND_SIZE_VALUES = [
+      "-moz-initial",
+      "fill",
+      "none",
+      "scale-down",
+      void 0
+    ];
     function isStaticRequire(src) {
       return src.default !== void 0;
     }
@@ -2789,7 +3662,7 @@ var require_get_img_props = __commonJS({
       return src.src !== void 0;
     }
     function isStaticImport(src) {
-      return typeof src === "object" && (isStaticRequire(src) || isStaticImageData(src));
+      return !!src && typeof src === "object" && (isStaticRequire(src) || isStaticImageData(src));
     }
     var allImgs = /* @__PURE__ */ new Map();
     var perfObserver;
@@ -2887,7 +3760,7 @@ var require_get_img_props = __commonJS({
       };
     }
     function getImgProps(param, _state) {
-      let { src, sizes, unoptimized = false, priority = false, loading, className, quality, width, height, fill = false, style, overrideSrc, onLoad, onLoadingComplete, placeholder = "empty", blurDataURL, fetchPriority, decoding = "async", layout, objectFit, objectPosition, lazyBoundary, lazyRoot, ...rest } = param;
+      let _a = param, { src, sizes, unoptimized = false, priority = false, loading, className, quality, width, height, fill = false, style, overrideSrc, onLoad, onLoadingComplete, placeholder = "empty", blurDataURL, fetchPriority, decoding = "async", layout, objectFit, objectPosition, lazyBoundary, lazyRoot } = _a, rest = __objRest(_a, ["src", "sizes", "unoptimized", "priority", "loading", "className", "quality", "width", "height", "fill", "style", "overrideSrc", "onLoad", "onLoadingComplete", "placeholder", "blurDataURL", "fetchPriority", "decoding", "layout", "objectFit", "objectPosition", "lazyBoundary", "lazyRoot"]);
       const { imgConf, showAltText, blurComplete, defaultLoader } = _state;
       let config;
       let c = imgConf || _imageconfig.imageConfigDefault;
@@ -2901,15 +3774,18 @@ var require_get_img_props = __commonJS({
         ].sort((a, b) => a - b);
         const deviceSizes = c.deviceSizes.sort((a, b) => a - b);
         const qualities = (_c_qualities = c.qualities) == null ? void 0 : _c_qualities.sort((a, b) => a - b);
-        config = {
-          ...c,
+        config = __spreadProps(__spreadValues({}, c), {
           allSizes,
           deviceSizes,
           qualities
-        };
+        });
       }
       if (typeof defaultLoader === "undefined") {
-        throw new Error("images.loaderFile detected but the file is missing default export.\nRead more: https://nextjs.org/docs/messages/invalid-images-config");
+        throw Object.defineProperty(new Error("images.loaderFile detected but the file is missing default export.\nRead more: https://nextjs.org/docs/messages/invalid-images-config"), "__NEXT_ERROR_CODE", {
+          value: "E163",
+          enumerable: false,
+          configurable: true
+        });
       }
       let loader = rest.loader || defaultLoader;
       delete rest.loader;
@@ -2917,12 +3793,16 @@ var require_get_img_props = __commonJS({
       const isDefaultLoader = "__next_img_default" in loader;
       if (isDefaultLoader) {
         if (config.loader === "custom") {
-          throw new Error('Image with src "' + src + '" is missing "loader" prop.\nRead more: https://nextjs.org/docs/messages/next-image-missing-loader');
+          throw Object.defineProperty(new Error('Image with src "' + src + '" is missing "loader" prop.\nRead more: https://nextjs.org/docs/messages/next-image-missing-loader'), "__NEXT_ERROR_CODE", {
+            value: "E252",
+            enumerable: false,
+            configurable: true
+          });
         }
       } else {
         const customImageLoader = loader;
         loader = (obj) => {
-          const { config: _, ...opts } = obj;
+          const _a2 = obj, { config: _ } = _a2, opts = __objRest(_a2, ["config"]);
           return customImageLoader(opts);
         };
       }
@@ -2946,10 +3826,7 @@ var require_get_img_props = __commonJS({
         };
         const layoutStyle = layoutToStyle[layout];
         if (layoutStyle) {
-          style = {
-            ...style,
-            ...layoutStyle
-          };
+          style = __spreadValues(__spreadValues({}, style), layoutStyle);
         }
         const layoutSizes = layoutToSizes[layout];
         if (layoutSizes && !sizes) {
@@ -2964,10 +3841,18 @@ var require_get_img_props = __commonJS({
       if (isStaticImport(src)) {
         const staticImageData = isStaticRequire(src) ? src.default : src;
         if (!staticImageData.src) {
-          throw new Error("An object should only be passed to the image component src parameter if it comes from a static image import. It must include src. Received " + JSON.stringify(staticImageData));
+          throw Object.defineProperty(new Error("An object should only be passed to the image component src parameter if it comes from a static image import. It must include src. Received " + JSON.stringify(staticImageData)), "__NEXT_ERROR_CODE", {
+            value: "E460",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (!staticImageData.height || !staticImageData.width) {
-          throw new Error("An object should only be passed to the image component src parameter if it comes from a static image import. It must include height and width. Received " + JSON.stringify(staticImageData));
+          throw Object.defineProperty(new Error("An object should only be passed to the image component src parameter if it comes from a static image import. It must include height and width. Received " + JSON.stringify(staticImageData)), "__NEXT_ERROR_CODE", {
+            value: "E48",
+            enumerable: false,
+            configurable: true
+          });
         }
         blurWidth = staticImageData.blurWidth;
         blurHeight = staticImageData.blurHeight;
@@ -2995,62 +3880,132 @@ var require_get_img_props = __commonJS({
       if (config.unoptimized) {
         unoptimized = true;
       }
-      if (isDefaultLoader && src.endsWith(".svg") && !config.dangerouslyAllowSVG) {
+      if (isDefaultLoader && !config.dangerouslyAllowSVG && src.split("?", 1)[0].endsWith(".svg")) {
         unoptimized = true;
-      }
-      if (priority) {
-        fetchPriority = "high";
       }
       const qualityInt = getInt(quality);
       if (process.env.NODE_ENV !== "production") {
+        var _config_localPatterns;
         if (config.output === "export" && isDefaultLoader && !unoptimized) {
-          throw new Error("Image Optimization using the default loader is not compatible with `{ output: 'export' }`.\n  Possible solutions:\n    - Remove `{ output: 'export' }` and run \"next start\" to run server mode including the Image Optimization API.\n    - Configure `{ images: { unoptimized: true } }` in `next.config.js` to disable the Image Optimization API.\n  Read more: https://nextjs.org/docs/messages/export-image-api");
+          throw Object.defineProperty(new Error("Image Optimization using the default loader is not compatible with `{ output: 'export' }`.\n  Possible solutions:\n    - Remove `{ output: 'export' }` and run \"next start\" to run server mode including the Image Optimization API.\n    - Configure `{ images: { unoptimized: true } }` in `next.config.js` to disable the Image Optimization API.\n  Read more: https://nextjs.org/docs/messages/export-image-api"), "__NEXT_ERROR_CODE", {
+            value: "E500",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (!src) {
           unoptimized = true;
         } else {
           if (fill) {
             if (width) {
-              throw new Error('Image with src "' + src + '" has both "width" and "fill" properties. Only one should be used.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has both "width" and "fill" properties. Only one should be used.'), "__NEXT_ERROR_CODE", {
+                value: "E96",
+                enumerable: false,
+                configurable: true
+              });
             }
             if (height) {
-              throw new Error('Image with src "' + src + '" has both "height" and "fill" properties. Only one should be used.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has both "height" and "fill" properties. Only one should be used.'), "__NEXT_ERROR_CODE", {
+                value: "E115",
+                enumerable: false,
+                configurable: true
+              });
             }
             if ((style == null ? void 0 : style.position) && style.position !== "absolute") {
-              throw new Error('Image with src "' + src + '" has both "fill" and "style.position" properties. Images with "fill" always use position absolute - it cannot be modified.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has both "fill" and "style.position" properties. Images with "fill" always use position absolute - it cannot be modified.'), "__NEXT_ERROR_CODE", {
+                value: "E216",
+                enumerable: false,
+                configurable: true
+              });
             }
             if ((style == null ? void 0 : style.width) && style.width !== "100%") {
-              throw new Error('Image with src "' + src + '" has both "fill" and "style.width" properties. Images with "fill" always use width 100% - it cannot be modified.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has both "fill" and "style.width" properties. Images with "fill" always use width 100% - it cannot be modified.'), "__NEXT_ERROR_CODE", {
+                value: "E73",
+                enumerable: false,
+                configurable: true
+              });
             }
             if ((style == null ? void 0 : style.height) && style.height !== "100%") {
-              throw new Error('Image with src "' + src + '" has both "fill" and "style.height" properties. Images with "fill" always use height 100% - it cannot be modified.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has both "fill" and "style.height" properties. Images with "fill" always use height 100% - it cannot be modified.'), "__NEXT_ERROR_CODE", {
+                value: "E404",
+                enumerable: false,
+                configurable: true
+              });
             }
           } else {
             if (typeof widthInt === "undefined") {
-              throw new Error('Image with src "' + src + '" is missing required "width" property.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" is missing required "width" property.'), "__NEXT_ERROR_CODE", {
+                value: "E451",
+                enumerable: false,
+                configurable: true
+              });
             } else if (isNaN(widthInt)) {
-              throw new Error('Image with src "' + src + '" has invalid "width" property. Expected a numeric value in pixels but received "' + width + '".');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has invalid "width" property. Expected a numeric value in pixels but received "' + width + '".'), "__NEXT_ERROR_CODE", {
+                value: "E66",
+                enumerable: false,
+                configurable: true
+              });
             }
             if (typeof heightInt === "undefined") {
-              throw new Error('Image with src "' + src + '" is missing required "height" property.');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" is missing required "height" property.'), "__NEXT_ERROR_CODE", {
+                value: "E397",
+                enumerable: false,
+                configurable: true
+              });
             } else if (isNaN(heightInt)) {
-              throw new Error('Image with src "' + src + '" has invalid "height" property. Expected a numeric value in pixels but received "' + height + '".');
+              throw Object.defineProperty(new Error('Image with src "' + src + '" has invalid "height" property. Expected a numeric value in pixels but received "' + height + '".'), "__NEXT_ERROR_CODE", {
+                value: "E444",
+                enumerable: false,
+                configurable: true
+              });
+            }
+            if (/^[\x00-\x20]/.test(src)) {
+              throw Object.defineProperty(new Error('Image with src "' + src + '" cannot start with a space or control character. Use src.trimStart() to remove it or encodeURIComponent(src) to keep it.'), "__NEXT_ERROR_CODE", {
+                value: "E176",
+                enumerable: false,
+                configurable: true
+              });
+            }
+            if (/[\x00-\x20]$/.test(src)) {
+              throw Object.defineProperty(new Error('Image with src "' + src + '" cannot end with a space or control character. Use src.trimEnd() to remove it or encodeURIComponent(src) to keep it.'), "__NEXT_ERROR_CODE", {
+                value: "E21",
+                enumerable: false,
+                configurable: true
+              });
             }
           }
         }
         if (!VALID_LOADING_VALUES.includes(loading)) {
-          throw new Error('Image with src "' + src + '" has invalid "loading" property. Provided "' + loading + '" should be one of ' + VALID_LOADING_VALUES.map(String).join(",") + ".");
+          throw Object.defineProperty(new Error('Image with src "' + src + '" has invalid "loading" property. Provided "' + loading + '" should be one of ' + VALID_LOADING_VALUES.map(String).join(",") + "."), "__NEXT_ERROR_CODE", {
+            value: "E357",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (priority && loading === "lazy") {
-          throw new Error('Image with src "' + src + `" has both "priority" and "loading='lazy'" properties. Only one should be used.`);
+          throw Object.defineProperty(new Error('Image with src "' + src + `" has both "priority" and "loading='lazy'" properties. Only one should be used.`), "__NEXT_ERROR_CODE", {
+            value: "E218",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (placeholder !== "empty" && placeholder !== "blur" && !placeholder.startsWith("data:image/")) {
-          throw new Error('Image with src "' + src + '" has invalid "placeholder" property "' + placeholder + '".');
+          throw Object.defineProperty(new Error('Image with src "' + src + '" has invalid "placeholder" property "' + placeholder + '".'), "__NEXT_ERROR_CODE", {
+            value: "E431",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (placeholder !== "empty") {
           if (widthInt && heightInt && widthInt * heightInt < 1600) {
             (0, _warnonce.warnOnce)('Image with src "' + src + '" is smaller than 40x40. Consider removing the "placeholder" property to improve performance.');
           }
+        }
+        if (qualityInt && qualityInt !== 75 && !config.qualities) {
+          (0, _warnonce.warnOnce)('Image with src "' + src + '" is using quality "' + qualityInt + '" which is not configured in images.qualities. This config will be required starting in Next.js 16.\nRead more: https://nextjs.org/docs/messages/next-image-unconfigured-qualities');
+        }
+        if (src.startsWith("/") && src.includes("?") && (!(config == null ? void 0 : (_config_localPatterns = config.localPatterns) == null ? void 0 : _config_localPatterns.length) || config.localPatterns.length === 1 && config.localPatterns[0].pathname === "/_next/static/media/**")) {
+          (0, _warnonce.warnOnce)('Image with src "' + src + '" is using a query string which is not configured in images.localPatterns. This config will be required starting in Next.js 16.\nRead more: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns');
         }
         if (placeholder === "blur" && !blurDataURL) {
           const VALID_BLUR_EXT = [
@@ -3059,10 +4014,14 @@ var require_get_img_props = __commonJS({
             "webp",
             "avif"
           ];
-          throw new Error('Image with src "' + src + `" has "placeholder='blur'" property but is missing the "blurDataURL" property.
+          throw Object.defineProperty(new Error('Image with src "' + src + `" has "placeholder='blur'" property but is missing the "blurDataURL" property.
         Possible solutions:
           - Add a "blurDataURL" property, the contents should be a small Data URL to represent the image
-          - Change the "src" property to a static import with one of the supported file types: ` + VALID_BLUR_EXT.join(",") + ' (animated images not supported)\n          - Remove the "placeholder" property, effectively no blur effect\n        Read more: https://nextjs.org/docs/messages/placeholder-blur-data-url');
+          - Change the "src" property to a static import with one of the supported file types: ` + VALID_BLUR_EXT.join(",") + ' (animated images not supported)\n          - Remove the "placeholder" property, effectively no blur effect\n        Read more: https://nextjs.org/docs/messages/placeholder-blur-data-url'), "__NEXT_ERROR_CODE", {
+            value: "E371",
+            enumerable: false,
+            configurable: true
+          });
         }
         if ("ref" in rest) {
           (0, _warnonce.warnOnce)('Image with src "' + src + '" is using unsupported "ref" property. Consider using the "onLoad" property instead.');
@@ -3139,8 +4098,9 @@ var require_get_img_props = __commonJS({
         blurDataURL: blurDataURL || "",
         objectFit: imgStyle.objectFit
       }) + '")' : 'url("' + placeholder + '")' : null;
+      const backgroundSize = !INVALID_BACKGROUND_SIZE_VALUES.includes(imgStyle.objectFit) ? imgStyle.objectFit : imgStyle.objectFit === "fill" ? "100% 100%" : "cover";
       let placeholderStyle = backgroundImage ? {
-        backgroundSize: imgStyle.objectFit || "cover",
+        backgroundSize,
         backgroundPosition: imgStyle.objectPosition || "50% 50%",
         backgroundRepeat: "no-repeat",
         backgroundImage
@@ -3174,22 +4134,18 @@ var require_get_img_props = __commonJS({
           });
         }
       }
-      const props = {
-        ...rest,
+      const props = __spreadProps(__spreadValues({}, rest), {
         loading: isLazy ? "lazy" : loading,
         fetchPriority,
         width: widthInt,
         height: heightInt,
         decoding,
         className,
-        style: {
-          ...imgStyle,
-          ...placeholderStyle
-        },
+        style: __spreadValues(__spreadValues({}, imgStyle), placeholderStyle),
         sizes: imgAttributes.sizes,
         srcSet: imgAttributes.srcSet,
         src: overrideSrc || imgAttributes.src
-      };
+      });
       const meta = {
         unoptimized,
         priority,
@@ -3371,13 +4327,13 @@ var require_head = __commonJS({
       const head = [
         /* @__PURE__ */ (0, _jsxruntime.jsx)("meta", {
           charSet: "utf-8"
-        })
+        }, "charset")
       ];
       if (!inAmpMode) {
         head.push(/* @__PURE__ */ (0, _jsxruntime.jsx)("meta", {
           name: "viewport",
           content: "width=device-width"
-        }));
+        }, "viewport"));
       }
       return head;
     }
@@ -3464,21 +4420,6 @@ var require_head = __commonJS({
       const { inAmpMode } = props;
       return headChildrenElements.reduce(onlyReactElement, []).reverse().concat(defaultHead(inAmpMode).reverse()).filter(unique()).reverse().map((c, i) => {
         const key = c.key || i;
-        if (process.env.NODE_ENV !== "development" && process.env.__NEXT_OPTIMIZE_FONTS && !inAmpMode) {
-          if (c.type === "link" && c.props["href"] && // TODO(prateekbh@): Replace this with const from `constants` when the tree shaking works.
-          [
-            "https://fonts.googleapis.com/css",
-            "https://use.typekit.net/"
-          ].some((url) => c.props["href"].startsWith(url))) {
-            const newProps = {
-              ...c.props || {}
-            };
-            newProps["data-href"] = newProps["href"];
-            newProps["href"] = void 0;
-            newProps["data-optimized-fonts"] = true;
-            return /* @__PURE__ */ _react.default.cloneElement(c, newProps);
-          }
-        }
         if (process.env.NODE_ENV === "development") {
           if (c.type === "script" && c.props["type"] !== "application/ld+json") {
             const srcMessage = c.props["src"] ? '<script> tag with src="' + c.props["src"] + '"' : "inline <script>";
@@ -3554,7 +4495,7 @@ var require_picomatch = __commonJS({
         };
         function picomatch(t3, e3, u3 = false) {
           if (e3 && (e3.windows === null || e3.windows === void 0)) {
-            e3 = { ...e3, windows: isWindows() };
+            e3 = __spreadProps(__spreadValues({}, e3), { windows: isWindows() });
           }
           return n(t3, e3, u3);
         }
@@ -3580,7 +4521,7 @@ var require_picomatch = __commonJS({
         const h = `${i}*?`;
         const g = "/";
         const b = { DOT_LITERAL: n, PLUS_LITERAL: o, QMARK_LITERAL: s, SLASH_LITERAL: r, ONE_CHAR: a, QMARK: i, END_ANCHOR: c, DOTS_SLASH: l, NO_DOT: f, NO_DOTS: A, NO_DOT_SLASH: _, NO_DOTS_SLASH: R, QMARK_NO_DOT: E, STAR: h, START_ANCHOR: p, SEP: g };
-        const C = { ...b, SLASH_LITERAL: `[${e2}]`, QMARK: u2, STAR: `${u2}*?`, DOTS_SLASH: `${n}{1,2}(?:[${e2}]|$)`, NO_DOT: `(?!${n})`, NO_DOTS: `(?!(?:^|[${e2}])${n}{1,2}(?:[${e2}]|$))`, NO_DOT_SLASH: `(?!${n}{0,1}(?:[${e2}]|$))`, NO_DOTS_SLASH: `(?!${n}{1,2}(?:[${e2}]|$))`, QMARK_NO_DOT: `[^.${e2}]`, START_ANCHOR: `(?:^|[${e2}])`, END_ANCHOR: `(?:[${e2}]|$)`, SEP: "\\" };
+        const C = __spreadProps(__spreadValues({}, b), { SLASH_LITERAL: `[${e2}]`, QMARK: u2, STAR: `${u2}*?`, DOTS_SLASH: `${n}{1,2}(?:[${e2}]|$)`, NO_DOT: `(?!${n})`, NO_DOTS: `(?!(?:^|[${e2}])${n}{1,2}(?:[${e2}]|$))`, NO_DOT_SLASH: `(?!${n}{0,1}(?:[${e2}]|$))`, NO_DOTS_SLASH: `(?!${n}{1,2}(?:[${e2}]|$))`, QMARK_NO_DOT: `[^.${e2}]`, START_ANCHOR: `(?:^|[${e2}])`, END_ANCHOR: `(?:[${e2}]|$)`, SEP: "\\" });
         const y = { alnum: "a-zA-Z0-9", alpha: "a-zA-Z", ascii: "\\x00-\\x7F", blank: " \\t", cntrl: "\\x00-\\x1F\\x7F", digit: "0-9", graph: "\\x21-\\x7E", lower: "a-z", print: "\\x20-\\x7E ", punct: "\\-!\"#$%&'()\\*+,./:;<=>?@[\\]^_`{|}~", space: " \\t\\r\\n\\v\\f", upper: "A-Z", word: "A-Za-z0-9_", xdigit: "A-Fa-f0-9" };
         t2.exports = { MAX_LENGTH: 1024 * 64, POSIX_REGEX_SOURCE: y, REGEX_BACKSLASH: /\\(?![*+?^${}(|)[\]])/g, REGEX_NON_SPECIAL_CHARS: /^[^@![\].,$*+?^{}()|\\/]+/, REGEX_SPECIAL_CHARS: /[-*+?.^${}(|)[\]]/, REGEX_SPECIAL_CHARS_BACKREF: /(\\?)((\W)(\3*))/g, REGEX_SPECIAL_CHARS_GLOBAL: /([-*+?.^${}(|)[\]])/g, REGEX_REMOVE_BACKSLASH: /(?:\[.*?[^\\]\]|\\(?=.))/g, REPLACEMENTS: { "***": "*", "**/**": "**", "**/**/**": "**" }, CHAR_0: 48, CHAR_9: 57, CHAR_UPPERCASE_A: 65, CHAR_LOWERCASE_A: 97, CHAR_UPPERCASE_Z: 90, CHAR_LOWERCASE_Z: 122, CHAR_LEFT_PARENTHESES: 40, CHAR_RIGHT_PARENTHESES: 41, CHAR_ASTERISK: 42, CHAR_AMPERSAND: 38, CHAR_AT: 64, CHAR_BACKWARD_SLASH: 92, CHAR_CARRIAGE_RETURN: 13, CHAR_CIRCUMFLEX_ACCENT: 94, CHAR_COLON: 58, CHAR_COMMA: 44, CHAR_DOT: 46, CHAR_DOUBLE_QUOTE: 34, CHAR_EQUAL: 61, CHAR_EXCLAMATION_MARK: 33, CHAR_FORM_FEED: 12, CHAR_FORWARD_SLASH: 47, CHAR_GRAVE_ACCENT: 96, CHAR_HASH: 35, CHAR_HYPHEN_MINUS: 45, CHAR_LEFT_ANGLE_BRACKET: 60, CHAR_LEFT_CURLY_BRACE: 123, CHAR_LEFT_SQUARE_BRACKET: 91, CHAR_LINE_FEED: 10, CHAR_NO_BREAK_SPACE: 160, CHAR_PERCENT: 37, CHAR_PLUS: 43, CHAR_QUESTION_MARK: 63, CHAR_RIGHT_ANGLE_BRACKET: 62, CHAR_RIGHT_CURLY_BRACE: 125, CHAR_RIGHT_SQUARE_BRACKET: 93, CHAR_SEMICOLON: 59, CHAR_SINGLE_QUOTE: 39, CHAR_SPACE: 32, CHAR_TAB: 9, CHAR_UNDERSCORE: 95, CHAR_VERTICAL_LINE: 124, CHAR_ZERO_WIDTH_NOBREAK_SPACE: 65279, extglobChars(t3) {
           return { "!": { type: "negate", open: "(?:(?!(?:", close: `))${t3.STAR})` }, "?": { type: "qmark", open: "(?:", close: ")?" }, "+": { type: "plus", open: "(?:", close: ")+" }, "*": { type: "star", open: "(?:", close: ")*" }, "@": { type: "at", open: "(?:", close: ")" } };
@@ -3610,7 +4551,7 @@ var require_picomatch = __commonJS({
             throw new TypeError("Expected a string");
           }
           t3 = c[t3] || t3;
-          const u3 = { ...e3 };
+          const u3 = __spreadValues({}, e3);
           const p = typeof u3.maxLength === "number" ? Math.min(s, u3.maxLength) : s;
           let l = t3.length;
           if (l > p) {
@@ -3700,7 +4641,7 @@ var require_picomatch = __commonJS({
             B = t4;
           };
           const extglobOpen = (t4, e4) => {
-            const n2 = { ...E[e4], conditions: 1, inner: "" };
+            const n2 = __spreadProps(__spreadValues({}, E[e4]), { conditions: 1, inner: "" });
             n2.prev = B;
             n2.parens = m.parens;
             n2.output = m.output;
@@ -3722,7 +4663,7 @@ var require_picomatch = __commonJS({
                 n2 = t4.close = `)$))${s2}`;
               }
               if (t4.inner.includes("*") && (o2 = remaining()) && /^\.[^\\/.]+$/.test(o2)) {
-                const u4 = parse(o2, { ...e3, fastpaths: false }).output;
+                const u4 = parse(o2, __spreadProps(__spreadValues({}, e3), { fastpaths: false })).output;
                 n2 = t4.close = `)${u4})${s2})`;
               }
               if (t4.prev.type === "bos") {
@@ -4237,7 +5178,7 @@ var require_picomatch = __commonJS({
           return m;
         };
         parse.fastpaths = (t3, e3) => {
-          const u3 = { ...e3 };
+          const u3 = __spreadValues({}, e3);
           const r2 = typeof u3.maxLength === "number" ? Math.min(s, u3.maxLength) : s;
           const a2 = t3.length;
           if (a2 > r2) {
@@ -4321,7 +5262,7 @@ var require_picomatch = __commonJS({
           delete r2.state;
           let isIgnored = () => false;
           if (o2.ignore) {
-            const t4 = { ...e3, ignore: null, onMatch: null, onResult: null };
+            const t4 = __spreadProps(__spreadValues({}, e3), { ignore: null, onMatch: null, onResult: null });
             isIgnored = picomatch(o2.ignore, t4, u3);
           }
           const matcher = (u4, n3 = false) => {
@@ -4382,7 +5323,7 @@ var require_picomatch = __commonJS({
         picomatch.isMatch = (t3, e3, u3) => picomatch(e3, u3)(t3);
         picomatch.parse = (t3, e3) => {
           if (Array.isArray(t3)) return t3.map(((t4) => picomatch.parse(t4, e3)));
-          return o(t3, { ...e3, fastpaths: false });
+          return o(t3, __spreadProps(__spreadValues({}, e3), { fastpaths: false }));
         };
         picomatch.scan = (t3, e3) => n(t3, e3);
         picomatch.compileRe = (t3, e3, u3 = false, n2 = false) => {
@@ -4745,7 +5686,7 @@ var require_picomatch = __commonJS({
         };
       } };
       var e = {};
-      function __nccwpck_require__(u2) {
+      function __nccwpck_require__2(u2) {
         var n = e[u2];
         if (n !== void 0) {
           return n.exports;
@@ -4753,15 +5694,15 @@ var require_picomatch = __commonJS({
         var o = e[u2] = { exports: {} };
         var s = true;
         try {
-          t[u2](o, o.exports, __nccwpck_require__);
+          t[u2](o, o.exports, __nccwpck_require__2);
           s = false;
         } finally {
           if (s) delete e[u2];
         }
         return o.exports;
       }
-      if (typeof __nccwpck_require__ !== "undefined") __nccwpck_require__.ab = __dirname + "/";
-      var u = __nccwpck_require__(170);
+      if (typeof __nccwpck_require__2 !== "undefined") __nccwpck_require__2.ab = __dirname + "/";
+      var u = __nccwpck_require__2(170);
       module.exports = u;
     })();
   }
@@ -4837,8 +5778,7 @@ var require_match_remote_pattern = __commonJS({
     var _picomatch = require_picomatch();
     function matchRemotePattern(pattern, url) {
       if (pattern.protocol !== void 0) {
-        const actualProto = url.protocol.slice(0, -1);
-        if (pattern.protocol !== actualProto) {
+        if (pattern.protocol.replace(/:$/, "") !== url.protocol.replace(/:$/, "")) {
           return false;
         }
       }
@@ -4848,7 +5788,11 @@ var require_match_remote_pattern = __commonJS({
         }
       }
       if (pattern.hostname === void 0) {
-        throw new Error("Pattern should define hostname but found\n" + JSON.stringify(pattern));
+        throw Object.defineProperty(new Error("Pattern should define hostname but found\n" + JSON.stringify(pattern)), "__NEXT_ERROR_CODE", {
+          value: "E410",
+          enumerable: false,
+          configurable: true
+        });
       } else {
         if (!(0, _picomatch.makeRe)(pattern.hostname).test(url.hostname)) {
           return false;
@@ -4895,21 +5839,33 @@ var require_image_loader = __commonJS({
         if (!src) missingValues.push("src");
         if (!width) missingValues.push("width");
         if (missingValues.length > 0) {
-          throw new Error("Next Image Optimization requires " + missingValues.join(", ") + " to be provided. Make sure you pass them as props to the `next/image` component. Received: " + JSON.stringify({
+          throw Object.defineProperty(new Error("Next Image Optimization requires " + missingValues.join(", ") + " to be provided. Make sure you pass them as props to the `next/image` component. Received: " + JSON.stringify({
             src,
             width,
             quality
-          }));
+          })), "__NEXT_ERROR_CODE", {
+            value: "E188",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (src.startsWith("//")) {
-          throw new Error('Failed to parse src "' + src + '" on `next/image`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)');
+          throw Object.defineProperty(new Error('Failed to parse src "' + src + '" on `next/image`, protocol-relative URL (//) must be changed to an absolute URL (http:// or https://)'), "__NEXT_ERROR_CODE", {
+            value: "E360",
+            enumerable: false,
+            configurable: true
+          });
         }
         if (src.startsWith("/") && config.localPatterns) {
           if (process.env.NODE_ENV !== "test" && // micromatch isn't compatible with edge runtime
           process.env.NEXT_RUNTIME !== "edge") {
             const { hasLocalMatch } = require_match_local_pattern();
             if (!hasLocalMatch(config.localPatterns, src)) {
-              throw new Error("Invalid src prop (" + src + ") on `next/image` does not match `images.localPatterns` configured in your `next.config.js`\nSee more info: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns");
+              throw Object.defineProperty(new Error("Invalid src prop (" + src + ") on `next/image` does not match `images.localPatterns` configured in your `next.config.js`\nSee more info: https://nextjs.org/docs/messages/next-image-unconfigured-localpatterns"), "__NEXT_ERROR_CODE", {
+                value: "E426",
+                enumerable: false,
+                configurable: true
+              });
             }
           }
         }
@@ -4919,22 +5875,34 @@ var require_image_loader = __commonJS({
             parsedSrc = new URL(src);
           } catch (err) {
             console.error(err);
-            throw new Error('Failed to parse src "' + src + '" on `next/image`, if using relative image it must start with a leading slash "/" or be an absolute URL (http:// or https://)');
+            throw Object.defineProperty(new Error('Failed to parse src "' + src + '" on `next/image`, if using relative image it must start with a leading slash "/" or be an absolute URL (http:// or https://)'), "__NEXT_ERROR_CODE", {
+              value: "E63",
+              enumerable: false,
+              configurable: true
+            });
           }
           if (process.env.NODE_ENV !== "test" && // micromatch isn't compatible with edge runtime
           process.env.NEXT_RUNTIME !== "edge") {
             const { hasRemoteMatch } = require_match_remote_pattern();
             if (!hasRemoteMatch(config.domains, config.remotePatterns, parsedSrc)) {
-              throw new Error("Invalid src prop (" + src + ') on `next/image`, hostname "' + parsedSrc.hostname + '" is not configured under images in your `next.config.js`\nSee more info: https://nextjs.org/docs/messages/next-image-unconfigured-host');
+              throw Object.defineProperty(new Error("Invalid src prop (" + src + ') on `next/image`, hostname "' + parsedSrc.hostname + '" is not configured under images in your `next.config.js`\nSee more info: https://nextjs.org/docs/messages/next-image-unconfigured-host'), "__NEXT_ERROR_CODE", {
+                value: "E231",
+                enumerable: false,
+                configurable: true
+              });
             }
           }
         }
         if (quality && config.qualities && !config.qualities.includes(quality)) {
-          throw new Error("Invalid quality prop (" + quality + ") on `next/image` does not match `images.qualities` configured in your `next.config.js`\nSee more info: https://nextjs.org/docs/messages/next-image-unconfigured-qualities");
+          throw Object.defineProperty(new Error("Invalid quality prop (" + quality + ") on `next/image` does not match `images.qualities` configured in your `next.config.js`\nSee more info: https://nextjs.org/docs/messages/next-image-unconfigured-qualities"), "__NEXT_ERROR_CODE", {
+            value: "E623",
+            enumerable: false,
+            configurable: true
+          });
         }
       }
       const q = quality || ((_config_qualities = config.qualities) == null ? void 0 : _config_qualities.reduce((prev, cur) => Math.abs(cur - DEFAULT_Q) < Math.abs(prev - DEFAULT_Q) ? cur : prev)) || DEFAULT_Q;
-      return config.path + "?url=" + encodeURIComponent(src) + "&w=" + width + "&q=" + q + (process.env.NEXT_DEPLOYMENT_ID ? "&dpl=" + process.env.NEXT_DEPLOYMENT_ID : "");
+      return config.path + "?url=" + encodeURIComponent(src) + "&w=" + width + "&q=" + q + (src.startsWith("/_next/static/media/") && process.env.NEXT_DEPLOYMENT_ID ? "&dpl=" + process.env.NEXT_DEPLOYMENT_ID : "");
     }
     defaultLoader.__next_img_default = true;
     var _default = defaultLoader;
@@ -4967,8 +5935,10 @@ var require_image_component = __commonJS({
     var _warnonce = require_warn_once();
     var _routercontextsharedruntime = require_router_context_shared_runtime();
     var _imageloader = /* @__PURE__ */ _interop_require_default._(require_image_loader());
+    var _usemergedref = require_use_merged_ref();
     var configEnv = process.env.__NEXT_IMAGE_OPTS;
     if (typeof window === "undefined") {
+      ;
       globalThis.__NEXT_IMAGE_IMPORTED = true;
     }
     function handleLoading(img, placeholder, onLoadRef, onLoadingCompleteRef, setBlurComplete, unoptimized, sizesInput) {
@@ -4994,8 +5964,7 @@ var require_image_component = __commonJS({
           });
           let prevented = false;
           let stopped = false;
-          onLoadRef.current({
-            ...event,
+          onLoadRef.current(__spreadProps(__spreadValues({}, event), {
             nativeEvent: event,
             currentTarget: img,
             target: img,
@@ -5011,7 +5980,7 @@ var require_image_component = __commonJS({
               stopped = true;
               event.stopPropagation();
             }
-          });
+          }));
         }
         if (onLoadingCompleteRef == null ? void 0 : onLoadingCompleteRef.current) {
           onLoadingCompleteRef.current(img);
@@ -5063,10 +6032,37 @@ var require_image_component = __commonJS({
       };
     }
     var ImageElement = /* @__PURE__ */ (0, _react.forwardRef)((param, forwardedRef) => {
-      let { src, srcSet, sizes, height, width, decoding, className, style, fetchPriority, placeholder, loading, unoptimized, fill, onLoadRef, onLoadingCompleteRef, setBlurComplete, setShowAltText, sizesInput, onLoad, onError, ...rest } = param;
-      return /* @__PURE__ */ (0, _jsxruntime.jsx)("img", {
-        ...rest,
-        ...getDynamicProps(fetchPriority),
+      let _a = param, { src, srcSet, sizes, height, width, decoding, className, style, fetchPriority, placeholder, loading, unoptimized, fill, onLoadRef, onLoadingCompleteRef, setBlurComplete, setShowAltText, sizesInput, onLoad, onError } = _a, rest = __objRest(_a, ["src", "srcSet", "sizes", "height", "width", "decoding", "className", "style", "fetchPriority", "placeholder", "loading", "unoptimized", "fill", "onLoadRef", "onLoadingCompleteRef", "setBlurComplete", "setShowAltText", "sizesInput", "onLoad", "onError"]);
+      const ownRef = (0, _react.useCallback)((img) => {
+        if (!img) {
+          return;
+        }
+        if (onError) {
+          img.src = img.src;
+        }
+        if (process.env.NODE_ENV !== "production") {
+          if (!src) {
+            console.error('Image is missing required "src" property:', img);
+          }
+          if (img.getAttribute("alt") === null) {
+            console.error('Image is missing required "alt" property. Please add Alternative Text to describe the image for screen readers and search engines.');
+          }
+        }
+        if (img.complete) {
+          handleLoading(img, placeholder, onLoadRef, onLoadingCompleteRef, setBlurComplete, unoptimized, sizesInput);
+        }
+      }, [
+        src,
+        placeholder,
+        onLoadRef,
+        onLoadingCompleteRef,
+        setBlurComplete,
+        onError,
+        unoptimized,
+        sizesInput
+      ]);
+      const ref = (0, _usemergedref.useMergedRef)(forwardedRef, ownRef);
+      return /* @__PURE__ */ (0, _jsxruntime.jsx)("img", __spreadProps(__spreadValues(__spreadValues({}, rest), getDynamicProps(fetchPriority)), {
         // It's intended to keep `loading` before `src` because React updates
         // props in order which causes Safari/Firefox to not lazy load properly.
         // See https://github.com/facebook/react/issues/25883
@@ -5086,41 +6082,7 @@ var require_image_component = __commonJS({
         sizes,
         srcSet,
         src,
-        ref: (0, _react.useCallback)((img) => {
-          if (forwardedRef) {
-            if (typeof forwardedRef === "function") forwardedRef(img);
-            else if (typeof forwardedRef === "object") {
-              forwardedRef.current = img;
-            }
-          }
-          if (!img) {
-            return;
-          }
-          if (onError) {
-            img.src = img.src;
-          }
-          if (process.env.NODE_ENV !== "production") {
-            if (!src) {
-              console.error('Image is missing required "src" property:', img);
-            }
-            if (img.getAttribute("alt") === null) {
-              console.error('Image is missing required "alt" property. Please add Alternative Text to describe the image for screen readers and search engines.');
-            }
-          }
-          if (img.complete) {
-            handleLoading(img, placeholder, onLoadRef, onLoadingCompleteRef, setBlurComplete, unoptimized, sizesInput);
-          }
-        }, [
-          src,
-          placeholder,
-          onLoadRef,
-          onLoadingCompleteRef,
-          setBlurComplete,
-          onError,
-          unoptimized,
-          sizesInput,
-          forwardedRef
-        ]),
+        ref,
         onLoad: (event) => {
           const img = event.currentTarget;
           handleLoading(img, placeholder, onLoadRef, onLoadingCompleteRef, setBlurComplete, unoptimized, sizesInput);
@@ -5134,37 +6096,31 @@ var require_image_component = __commonJS({
             onError(event);
           }
         }
-      });
+      }));
     });
     function ImagePreload(param) {
       let { isAppRouter, imgAttributes } = param;
-      const opts = {
+      const opts = __spreadValues({
         as: "image",
         imageSrcSet: imgAttributes.srcSet,
         imageSizes: imgAttributes.sizes,
         crossOrigin: imgAttributes.crossOrigin,
-        referrerPolicy: imgAttributes.referrerPolicy,
-        ...getDynamicProps(imgAttributes.fetchPriority)
-      };
+        referrerPolicy: imgAttributes.referrerPolicy
+      }, getDynamicProps(imgAttributes.fetchPriority));
       if (isAppRouter && _reactdom.default.preload) {
-        _reactdom.default.preload(
-          imgAttributes.src,
-          // @ts-expect-error TODO: upgrade to `@types/react-dom@18.3.x`
-          opts
-        );
+        _reactdom.default.preload(imgAttributes.src, opts);
         return null;
       }
       return /* @__PURE__ */ (0, _jsxruntime.jsx)(_head.default, {
-        children: /* @__PURE__ */ (0, _jsxruntime.jsx)("link", {
+        children: /* @__PURE__ */ (0, _jsxruntime.jsx)("link", __spreadValues({
           rel: "preload",
           // Note how we omit the `href` attribute, as it would only be relevant
           // for browsers that do not support `imagesrcset`, and in those cases
           // it would cause the incorrect image to be preloaded.
           //
           // https://html.spec.whatwg.org/multipage/semantics.html#attr-link-imagesrcset
-          href: imgAttributes.srcSet ? void 0 : imgAttributes.src,
-          ...opts
-        }, "__nimg-" + imgAttributes.src + imgAttributes.srcSet + imgAttributes.sizes)
+          href: imgAttributes.srcSet ? void 0 : imgAttributes.src
+        }, opts), "__nimg-" + imgAttributes.src + imgAttributes.srcSet + imgAttributes.sizes)
       });
     }
     var Image4 = /* @__PURE__ */ (0, _react.forwardRef)((props, forwardedRef) => {
@@ -5180,12 +6136,11 @@ var require_image_component = __commonJS({
         ].sort((a, b) => a - b);
         const deviceSizes = c.deviceSizes.sort((a, b) => a - b);
         const qualities = (_c_qualities = c.qualities) == null ? void 0 : _c_qualities.sort((a, b) => a - b);
-        return {
-          ...c,
+        return __spreadProps(__spreadValues({}, c), {
           allSizes,
           deviceSizes,
           qualities
-        };
+        });
       }, [
         configContext
       ]);
@@ -5212,8 +6167,7 @@ var require_image_component = __commonJS({
       });
       return /* @__PURE__ */ (0, _jsxruntime.jsxs)(_jsxruntime.Fragment, {
         children: [
-          /* @__PURE__ */ (0, _jsxruntime.jsx)(ImageElement, {
-            ...imgAttributes,
+          /* @__PURE__ */ (0, _jsxruntime.jsx)(ImageElement, __spreadProps(__spreadValues({}, imgAttributes), {
             unoptimized: imgMeta.unoptimized,
             placeholder: imgMeta.placeholder,
             fill: imgMeta.fill,
@@ -5223,7 +6177,7 @@ var require_image_component = __commonJS({
             setShowAltText,
             sizesInput: props.sizes,
             ref: forwardedRef
-          }),
+          })),
           imgMeta.priority ? /* @__PURE__ */ (0, _jsxruntime.jsx)(ImagePreload, {
             isAppRouter,
             imgAttributes
@@ -5626,11 +6580,10 @@ var sortModifiers = (modifiers) => {
   sortedModifiers.push(...unsortedModifiers.sort());
   return sortedModifiers;
 };
-var createConfigUtils = (config) => ({
+var createConfigUtils = (config) => __spreadValues({
   cache: createLruCache(config.cacheSize),
-  parseClassName: createParseClassName(config),
-  ...createClassGroupUtils(config)
-});
+  parseClassName: createParseClassName(config)
+}, createClassGroupUtils(config));
 var SPLIT_CLASSES_REGEX = /\s+/;
 var mergeClassList = (classList, configUtils) => {
   const {
@@ -7858,17 +8811,19 @@ function cn(...inputs) {
 }
 
 // src/components/Button.tsx
-var Button = ({ variant = "primary", className, ...props }) => /* @__PURE__ */ React.createElement(
-  "button",
-  {
-    ...props,
-    className: cn(
-      "inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-      variant === "primary" ? "bg-accent text-background hover:opacity-90 focus-visible:ring-accent/50" : "border border-foreground/20 bg-transparent text-foreground hover:border-accent hover:text-accent focus-visible:ring-accent/30",
-      className
-    )
-  }
-);
+var Button = (_a) => {
+  var _b = _a, { variant = "primary", className } = _b, props = __objRest(_b, ["variant", "className"]);
+  return /* @__PURE__ */ React.createElement(
+    "button",
+    __spreadProps(__spreadValues({}, props), {
+      className: cn(
+        "inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-medium transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        variant === "primary" ? "bg-accent text-background hover:opacity-90 focus-visible:ring-accent/50" : "border border-foreground/20 bg-transparent text-foreground hover:border-accent hover:text-accent focus-visible:ring-accent/30",
+        className
+      )
+    })
+  );
+};
 
 // src/components/Card.tsx
 var Card = ({ title, description, children, className }) => /* @__PURE__ */ React.createElement("div", { className: cn("rounded-2xl border border-white/10 bg-surface/80 p-6 backdrop-blur transition hover:border-accent/60", className) }, title && /* @__PURE__ */ React.createElement("h3", { className: "text-lg font-semibold text-foreground" }, title), description && /* @__PURE__ */ React.createElement("p", { className: "mt-2 text-sm text-foreground/70" }, description), children);
@@ -8014,7 +8969,8 @@ var Modal = ({ isOpen, onClose, title, children, className }) => {
 };
 
 // src/components/Input.tsx
-var Input = ({ label, error, className, id, ...props }) => {
+var Input = (_a) => {
+  var _b = _a, { label, error, className, id } = _b, props = __objRest(_b, ["label", "error", "className", "id"]);
   const inputId = id || props.name;
   return /* @__PURE__ */ React.createElement("div", { className: "w-full" }, label && /* @__PURE__ */ React.createElement(
     "label",
@@ -8025,7 +8981,7 @@ var Input = ({ label, error, className, id, ...props }) => {
     label
   ), /* @__PURE__ */ React.createElement(
     "input",
-    {
+    __spreadValues({
       id: inputId,
       className: cn(
         "w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white",
@@ -8033,9 +8989,8 @@ var Input = ({ label, error, className, id, ...props }) => {
         "placeholder:text-slate-500",
         error && "border-red-500",
         className
-      ),
-      ...props
-    }
+      )
+    }, props)
   ), error && /* @__PURE__ */ React.createElement("p", { className: "mt-1 text-sm text-red-500" }, error));
 };
 
