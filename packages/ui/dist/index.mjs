@@ -6252,9 +6252,9 @@ import { Menu } from "lucide-react";
 import { useState } from "react";
 var navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/subsidiaries", label: "Subsidiaries" },
-  { href: "/contact", label: "Contact" }
+  { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" }
 ];
 var Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

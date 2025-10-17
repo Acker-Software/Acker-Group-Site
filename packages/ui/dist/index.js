@@ -6273,9 +6273,9 @@ var import_lucide_react = require("lucide-react");
 var import_react = require("react");
 var navLinks = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
   { href: "/subsidiaries", label: "Subsidiaries" },
-  { href: "/contact", label: "Contact" }
+  { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" }
 ];
 var Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = (0, import_react.useState)(false);
